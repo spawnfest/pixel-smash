@@ -13,26 +13,27 @@ defmodule PixelSmash.Gladiators do
   """
 
   alias PixelSmash.Gladiators.Gladiator
-  alias PixelSmash.Repo
+
+  @repo Application.compile_env!(:pixel_smash, :repo)
 
   defdelegate build_fighter(gladiator), to: Gladiator
 
   def list_gladiators() do
     Gladiator
-    |> Repo.all()
+    |> @repo.all()
     |> Enum.map(&hydrate_gladiator/1)
   end
 
   def get_gladiator!(id) do
     Gladiator
-    |> Repo.get!(id)
+    |> @repo.get!(id)
     |> hydrate_gladiator()
   end
 
   def persist_gladiator(%Gladiator{} = gladiator) do
     %Gladiator{}
     |> Gladiator.gladiator_changeset(%{name: gladiator.name, sprite: gladiator.sprite})
-    |> Repo.insert()
+    |> @repo.insert()
   end
 
   def generate_gladiator do
@@ -68,7 +69,7 @@ defmodule PixelSmash.Gladiators do
 
   defp hydrate_gladiator(%Gladiator{} = gladiator) do
     gladiator
-    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
+    |> Map.update!(:sprite, &@repo.sprite_from_map(&1))
     |> Gladiator.populate_attributes()
     |> Gladiator.verify_fields!()
   end

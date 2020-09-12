@@ -7,6 +7,7 @@ defmodule PixelSmash.Application do
     children = [
       # Start the Ecto repository
       PixelSmash.Repo,
+      PixelSmash.MemoryRepo,
       # Start the Telemetry supervisor
       PixelSmashWeb.Telemetry,
       # Start the PubSub system
