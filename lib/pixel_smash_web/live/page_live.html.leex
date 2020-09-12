@@ -24,3 +24,5 @@
       <p><%= line %></p>
     <% end %>
 <% end %>
+
+<%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10) %>
