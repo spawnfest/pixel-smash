@@ -44,8 +44,10 @@ defmodule PixelSmash.Gladiators.Gladiator do
   end
 
   def verify_fields!(%__MODULE__{} = gladiator) do
+
   end
 
   def build_fighter(%__MODULE__{} = gladiator) do
+
   end
 end

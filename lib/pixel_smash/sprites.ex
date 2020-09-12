@@ -15,4 +15,6 @@ defmodule PixelSmash.Sprites do
   end
 
   defdelegate new_pixel(base_color, tint), to: Pixel, as: :new
+
+  def background_pixel, do: 1 |> Pixel.background() |> List.first()
 end
