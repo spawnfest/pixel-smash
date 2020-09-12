@@ -9,6 +9,10 @@ defmodule PixelSmash.Battles.Battle do
   }
 
   defsum do
+    defdata Scheduled do
+      fighters :: {Fighter.t(), Fighter.t()} \\ nil
+    end
+
     defdata InProgress do
       fighters :: {Fighter.t(), Fighter.t()} \\ nil
       log :: Log.t()

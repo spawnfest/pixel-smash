@@ -4,8 +4,12 @@ defmodule PixelSmash.Battles do
     Fighter
   }
 
-  def create_battle(%Fighter{} = left, %Fighter{} = right) do
-    Battle.InProgress.new({left, right})
+  def schedule_battle(%Fighter{} = left, %Fighter{} = right) do
+    Battle.Scheduled.new({left, right})
+  end
+
+  def start_battle(%Battle.Scheduled{} = battle) do
+    Battle.InProgress.new(battle.fighters)
   end
 
   def tick_battle(%Battle.InProgress{} = battle) do
