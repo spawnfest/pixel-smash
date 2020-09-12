@@ -7,7 +7,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
 
   schema "gladiators" do
     field :name, :string
-    field :sprite, :binary
+    field :sprite, :map
     field :exhaustion, :integer, virtual: true
     field :health, :integer, virtual: true
     field :strength, :integer, virtual: true
@@ -40,7 +40,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
     %{gladiator | sprite: SpriteMapper.sprite(attributes)}
   end
 
-  def populate_attributes(%__MODULE__{sprite: sprite} = gladiator) when is_binary(sprite) do
+  def populate_attributes(%__MODULE__{sprite: sprite} = gladiator) when is_map(sprite) do
     struct!(gladiator, SpriteMapper.attributes(sprite))
   end
 

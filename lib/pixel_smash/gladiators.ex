@@ -1,7 +1,7 @@
 defmodule PixelSmash.Gladiators do
   import Ecto.Query, warn: false
-  alias PixelSmash.Repo
   alias PixelSmash.Gladiators.Gladiator
+  alias PixelSmash.Repo
 
   def generate_gladiator do
     [
@@ -36,15 +36,16 @@ defmodule PixelSmash.Gladiators do
 
   defdelegate build_fighter(gladiator), to: Gladiator
 
-  def persist_gladiator(name, sprite) do
+  def persist_gladiator(%Gladiator{} = gladiator) do
     %Gladiator{}
-    |> Gladiator.gladiator_changeset(%{name: name, sprite: sprite})
+    |> Gladiator.gladiator_changeset(%{name: gladiator.name, sprite: gladiator.sprite})
     |> Repo.insert()
   end
 
   def get_gladiator!(id) do
     Gladiator
     |> Repo.get!(id)
+    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
     |> Gladiator.populate_attributes()
     |> Gladiator.verify_fields!()
   end

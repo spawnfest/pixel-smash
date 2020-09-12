@@ -4,7 +4,7 @@ defmodule PixelSmash.Repo.Migrations.AddGladiatorsTable do
   def change do
     create table(:gladiators) do
       add :name, :string, null: false
-      add :sprite, :binary, null: false
+      add :sprite, :map, null: false
       timestamps()
     end
   end

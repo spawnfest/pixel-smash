@@ -3,6 +3,7 @@ defmodule PixelSmash.Sprites.Sprite do
   Helpers for working with sprite structures.
   """
 
+  @derive Jason.Encoder
   defstruct [
     :x,
     :y,
