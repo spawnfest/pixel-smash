@@ -25,4 +25,4 @@
     <% end %>
 <% end %>
 
-<%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10) %>
+<%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
