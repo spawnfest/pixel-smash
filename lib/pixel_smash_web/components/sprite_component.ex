@@ -4,16 +4,16 @@ defmodule PixelSmashWeb.SpriteComponent do
   def render(assigns) do
     ~L"""
     <svg viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>" xmlns="http://www.w3.org/2000/svg">
-      <%= for {{x, y}, color} <- @sprite.map do %>
-        <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="<%= fill_color(color) %>"/>
+      <%= for {{x, y}, {base_color, tint}} <- @sprite.map do %>
+        <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="<%= fill_color(base_color) %>" fill-opacity="<%= 0.2 + abs((tint / 100.0) - 0.2) %>"/>
       <% end %>
     </svg>
     """
   end
 
-  defp fill_color({base_color, tint}) do
+  defp fill_color(base_color) do
     {h, s, l} = hsl(base_color)
-    "hsla(#{h}, #{s}%, #{l}%, #{0.25 + tint / 2.0})"
+    "hsla(#{h}, #{s}%, #{l}%)"
   end
 
   defp hsl(base_color) do
