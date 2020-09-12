@@ -50,7 +50,8 @@ defmodule PixelSmash.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:faker, "~> 0.15"}
+      {:faker, "~> 0.15"},
+      {:norm, "~> 0.12.0"}
     ]
   end
 
