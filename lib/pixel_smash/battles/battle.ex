@@ -25,7 +25,19 @@ defmodule PixelSmash.Battles.Battle do
     end
   end
 
-  def narrate(battle) do
+  def schedule(%Fighter{} = left, %Fighter{} = right) do
+    Battle.Scheduled.new({left, right})
+  end
+
+  def start(%Battle.Scheduled{} = battle) do
+    Battle.InProgress.new(battle.fighters)
+  end
+
+  def narrate(%Battle.InProgress{} = battle) do
+    Log.narrate(battle.log)
+  end
+
+  def narrate(%Battle.Finished{} = battle) do
     Log.narrate(battle.log)
   end
 
