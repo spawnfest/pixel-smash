@@ -59,7 +59,7 @@ defmodule PixelSmashWeb.PageLive do
       random_attribute_value(:strength),
       random_attribute_value(:speed),
       random_attribute_value(:magic),
-      ["Freeze Ray"]
+      random_attribute_value(:power)
     )
   end
 
@@ -68,4 +68,9 @@ defmodule PixelSmashWeb.PageLive do
   defp random_attribute_value(:strength), do: Enum.random(10..30)
   defp random_attribute_value(:speed), do: Enum.random(5..25)
   defp random_attribute_value(:magic), do: Enum.random(15..45)
+  defp random_attribute_value(:power) do
+    num = Enum.random(1..3)
+    Enum.to_list(1..num)
+    |> Enum.map(fn _index -> Faker.Superhero.En.power end)
+  end
 end
