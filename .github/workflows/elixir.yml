@@ -14,6 +14,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Setup PostgreSQL
+      uses: Harmon758/postgresql-action@v1.0.0
+      with:
+        # Version of PostgreSQL to use
+        postgresql version: latest # optional, default is latest
+        # POSTGRES_USER - create the specified user with superuser power
+        postgresql user: postgres
+        # POSTGRES_PASSWORD - superuser password
+        postgresql password: postgres # optional, default is 
+    
     - name: Set up Elixir
       uses: actions/setup-elixir@v1
       with:
@@ -27,5 +38,7 @@ jobs:
         restore-keys: ${{ runner.os }}-mix-
     - name: Install dependencies
       run: mix deps.get
+    - name: Setup db
+      run: mix ecto.create
     - name: Run tests
       run: mix test
