@@ -17,7 +17,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
     timestamps()
   end
 
-  def new!(fields) do
+  def new(fields) do
     struct!(__MODULE__, fields)
   end
 
@@ -32,6 +32,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
 
     attributes =
       gladiator
+      |> Map.from_struct()
       |> Enum.filter(attribute?)
       |> Enum.into(%{})
 
