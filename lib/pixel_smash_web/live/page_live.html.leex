@@ -1,13 +1,14 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "PixelSmash Arena" %></h1>
-</section>
 
+<section>
 <%= case @battle do %>
   <%= %Battles.Battle.Scheduled{} -> %>
     <% {left, right} = @battle.fighters %>
-    <h2>Upcoming: <%= left.name %> vs. <%= right.name %></h2>
-
-    <button phx-click="start_battle">Start Battle!</button>
+    <div class="py-10">
+      <h2 class="h-2 py-1">Upcoming: <%= left.name %> vs. <%= right.name %></h2>
+    </div>
+    <div>
+      <button class="bg-blue-500 hover:bg-blue-500 py-2 px-4 rounded" phx-click="start_battle">Start Battle!</button>
+    </div>
   <% %Battles.Battle.InProgress{} -> %>
     <% {left, right} = @battle.fighters %>
     <h2><%= left.name %> vs. <%= right.name %></h2>
@@ -23,6 +24,9 @@
     <%= for line <- @battle_log do %>
       <p><%= line %></p>
     <% end %>
-<% end %>
+  <% end %>
+</section>
 
-<%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
+<section class="py-3">
+  <%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
+</section>
