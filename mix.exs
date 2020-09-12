@@ -4,13 +4,15 @@ defmodule PixelSmash.MixProject do
   def project do
     [
       app: :pixel_smash,
-      version: "0.1.0",
+      version: "0.5.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -36,6 +38,7 @@ defmodule PixelSmash.MixProject do
     [
       {:algae, "~> 1.2"},
       {:bcrypt_elixir, "~> 2.0"},
+      {:excoveralls, "~> 0.10", only: :test},
       {:phoenix, "~> 1.5.4"},
       {:phoenix_ecto, "~> 4.1"},
       {:phx_gen_auth, "~> 0.5", only: [:dev], runtime: false},
