@@ -10,7 +10,6 @@ defmodule PixelSmash.Gladiators.Pixel do
   at the module level
   """
   def new() do
-    Enum.random @colors
+    Enum.random(@colors)
   end
-
 end

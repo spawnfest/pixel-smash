@@ -3,79 +3,112 @@ defmodule PixelSmash.Gladiators.Grid do
   Helpers for working with grid structures.
   """
 
-  defstruct [:x, :y, :data, :map]
+  defstruct [
+    :x,
+    :y,
+    :map
+  ]
 
-  alias PixelSmash.Gladiators.Pixel
+  require Logger
 
-  @doc """
-  Creates a 10x10 grid with pre-assigned colors, it is possible to create
-  grids of different sizes by passing an integer as parameter.
-
-  Grids are always mirrored in the y-vertical axis.
-  """
-  def new(size \\ 10) when is_integer(size) and size > 1 do
-    data = Enum.map(1..size, fn _x -> half_row(size) end)
-    map = to_map(data, size)
-    %__MODULE__{x: size, y: size, data: data, map: map}
-  end
-
-  def apply(grid, shape, _at \\ {0, 0}) when is_list(grid) and is_list(shape) do
-    # Brittle way of getting the grid size
-    size = Enum.count(grid)
-
-    # Getting the size is useful for creating a range of coordinates
-    coordinates =
-      for y <- 1..size, x <- 1..size do
-        {y, x}
-      end
-
-    elements = Enum.flat_map(grid, fn x -> x end)
-
-    Enum.zip(coordinates, elements) |> Enum.into(%{})
-  end
-
-  defp to_map(grid, size) do
-    coordinates =
-      for y <- 1..size, x <- 1..size do
-        {y, x}
-      end
-
-    elements = Enum.flat_map(grid, fn x -> x end)
-
-    Enum.zip(coordinates, elements) |> Enum.into(%{})
-  end
-
-  # defp to_map(%__MODULE__{} = grid) when grid.x == grid.y do
-  #  coordinates =
-  #    for y <- 1..grid.y, x <- 1..grid.y do
-  #      {y, x}
-  #    end
-
-  #  elements = Enum.flat_map(grid.data, fn x -> x end)
-
-  #  Enum.zip(coordinates, elements) |> Enum.into(%{})
-  #  Map.put(grid, :)
-  # end
+  @type t() :: %__MODULE__{}
+  @type coor() :: {integer(), integer()}
 
   @doc """
-  Generates half a row, mirrors it and merges it with its other half.
+  Creates a X by Y grid with with all starting values being `:nil`. A generator function may
+  be applied in order to fill the grid with the desired data.
+
+  No matter the generation fuction, grids are always mirrored in the y-vertical axis.
   """
-  defp half_row(size) do
+  def new(size_x, size_y, generator_fn \\ &nils/0) do
+    %__MODULE__{x: size_x, y: size_y}
+    |> generate(generator_fn)
+  end
+
+  # @spec apply_mask(grid :: t(), mask :: t()) :: t()
+  def apply_mask(%__MODULE__{} = grid, %__MODULE__{} = mask, apply_fn \\ &merge/3) do
+    mask_map =
+      mask.map
+      |> Enum.reject(fn {{x, y}, _value} -> x > grid.x or y > grid.y end)
+      |> Enum.reject(fn {{x, y}, _value} -> x < 1 or y < 1 end)
+      |> Enum.into(%{})
+
+    map = Map.merge(grid.map, mask_map, apply_fn)
+    Map.put(grid, :map, map)
+  end
+
+  @spec position(grid :: t(), at :: coor()) :: t()
+  def position(%__MODULE__{} = grid, at \\ {0, 0}) do
+    map =
+      Enum.map(grid.map, fn {key, value} ->
+        key = add_coordinate(key, at)
+        {key, value}
+      end)
+
+    Map.put(grid, :map, map)
+  end
+
+  defp generate(%__MODULE__{} = grid, generator_fn) do
+    data =
+      for _ <- 1..grid.y do
+        generate_row(grid.x, generator_fn)
+      end
+
+    coordinates =
+      for y <- 1..grid.y, x <- 1..grid.x do
+        {x, y}
+      end
+
+    elements = Enum.flat_map(data, fn x -> x end)
+
+    map = Enum.zip(coordinates, elements) |> Enum.into(%{})
+    Map.put(grid, :map, map)
+  end
+
+  @spec generate_row(size :: integer(), (() -> term())) :: list()
+  defp generate_row(size, generator_fn) do
+    # Generates half a row.
     half = div(size, 2)
-    x1_row = Enum.map(1..half, fn _x -> Pixel.new() end)
+    x1_row = Enum.map(1..half, fn _x -> generator_fn.() end)
+
+    # Mirrors it.
     x2_row = Enum.reverse(x1_row)
 
+    # And finally merges it with its other half.
     if even?(size) do
       Enum.concat(x1_row, x2_row)
     else
-      Enum.concat([x1_row, [Pixel.new()], x2_row])
+      Enum.concat([x1_row, [generator_fn.()], x2_row])
     end
   end
 
-  defp apply_row(size) do
+  @spec add_coordinate(coor_a :: coor(), coor_b :: coor()) :: coor()
+  defp add_coordinate(coor_a, coor_b) do
+    # Adds a pair of coordinate tuples {x, y} + {x', y'}
+    {xa, ya} = coor_a
+    {xb, yb} = coor_b
+
+    {xa + xb, ya + yb}
   end
 
+  defp merge(_key, _value1, value2), do: value2
+
+  defp nils(), do: nil
+
+  @spec even?(value :: integer()) :: boolean()
   defp even?(value) do
     rem(value, 2) == 0
+  end
+
+  def ins(%__MODULE__{} = grid) do
+    for y <- 1..grid.y do
+      row =
+        for x <- 1..grid.x do
+          grid.map[{x, y}]
+        end
+
+      row = Enum.join(row, "\t")
+      Logger.info(inspect(row))
+    end
   end
 end
