@@ -6,6 +6,7 @@ defmodule PixelSmash.Battles.Fighter do
   defdata do
     id :: String.t()
     name :: String.t()
+    sprite :: map()
     exhaustion :: non_neg_integer()
     max_health :: non_neg_integer()
     health :: non_neg_integer()
