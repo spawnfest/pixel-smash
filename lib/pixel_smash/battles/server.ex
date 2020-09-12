@@ -15,6 +15,10 @@ defmodule PixelSmash.Battles.Server do
     GenServer.call(pid, :start_battle)
   end
 
+  def get_battle(pid) do
+    GenServer.call(pid, :get_battle)
+  end
+
   def get_narration(pid) do
     GenServer.call(pid, :get_narration)
   end
@@ -29,6 +33,11 @@ defmodule PixelSmash.Battles.Server do
     schedule_next_tick()
 
     {:reply, :ok, Battle.start(battle)}
+  end
+
+  @impl GenServer
+  def handle_call(:get_battle, _from, battle) do
+    {:reply, battle, battle}
   end
 
   @impl GenServer

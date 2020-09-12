@@ -1,3 +1,26 @@
 <section class="phx-hero">
   <h1><%= gettext "Welcome to %{name}!", name: "Pixel Smash" %></h1>
 </section>
+
+<%= case @battle do %>
+  <%= %Battles.Battle.Scheduled{} -> %>
+    <% {left, right} = @battle.fighters %>
+    <h2>Upcoming: <%= left.name %> vs. <%= right.name %></h2>
+
+    <button phx-click="start_battle">Start Battle!</button>
+  <% %Battles.Battle.InProgress{} -> %>
+    <% {left, right} = @battle.fighters %>
+    <h2><%= left.name %> vs. <%= right.name %></h2>
+
+    <%= for line <- @battle_log do %>
+      <p><%= line %></p>
+    <% end %>
+
+  <% %Battles.Battle.Finished{} -> %>
+    <h2>Winner: <%= @battle.winner.name %></h2>
+    <h2>Loser: <%= @battle.loser.name %></h2>
+
+    <%= for line <- @battle_log do %>
+      <p><%= line %></p>
+    <% end %>
+<% end %>

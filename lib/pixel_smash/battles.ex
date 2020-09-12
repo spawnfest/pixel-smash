@@ -15,6 +15,10 @@ defmodule PixelSmash.Battles do
     Server.start_battle(battle_server)
   end
 
+  def get_battle(battle_server) do
+    Server.get_battle(battle_server)
+  end
+
   def narrate_battle(battle_server) do
     Server.get_narration(battle_server)
   end
