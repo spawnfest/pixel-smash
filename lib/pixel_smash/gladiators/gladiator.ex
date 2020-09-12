@@ -1,6 +1,8 @@
 defmodule PixelSmash.Gladiators.Gladiator do
   import Algae
 
+  alias PixelSmash.Sprites
+
   alias PixelSmash.Gladiators.{
     Gladiator,
     SpriteMapper
@@ -18,8 +20,19 @@ defmodule PixelSmash.Gladiators.Gladiator do
   end
 
   def generate() do
+    # Temporarily we use a random sprite. We need to hook sprites up to stats
     %Gladiator{
       id: Ecto.UUID.generate(),
+      sprite:
+        Sprites.generate_sprite(10, 10, fn ->
+          Enum.random([
+            {:red, 100.0},
+            {:blue, 100.0},
+            {:yellow, 100.0},
+            {:purple, 100.0},
+            {:green, 100.0}
+          ])
+        end),
       name: Faker.Person.En.name(),
       max_health: Enum.random(50..100),
       strength: Enum.random(3..18),
@@ -27,7 +40,6 @@ defmodule PixelSmash.Gladiators.Gladiator do
       magic: Enum.random(8..30),
       spells: Faker.Util.sample_uniq(3, &Faker.Superhero.En.power/0)
     }
-    |> populate_sprite()
   end
 
   defp populate_sprite(%Gladiator{} = gladiator) do

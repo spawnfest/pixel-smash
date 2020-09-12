@@ -9,6 +9,8 @@
               <span class="font-bold">Upcoming:</span>
               <%= left.name %> <span class="font-bold text-xl">vs.</span>
               <%= right.name %>
+              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: left.sprite %>
+              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: right.sprite %>
             </h2>
           </div>
           <div class="px-5 py-10">
@@ -29,6 +31,8 @@
               <span class="font-bold">In Progress:</span>
               <%= left.name %> <span class="font-bold text-xl">vs.</span>
               <%= right.name %>
+              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: left.sprite %>
+              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: right.sprite %>
             </h2>
           </div>
           <div class="px-5 py-10">
@@ -45,6 +49,7 @@
               <span class="font-bold">Finished!</span>
               <h2>Winner: <%= battle.winner.name %></h2>
               <h2>Loser: <%= battle.loser.name %></h2>
+              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: battle.winner.sprite %>
             </h2>
           </div>
           <div class="px-5 py-10">

@@ -3,10 +3,21 @@ defmodule PixelSmashWeb.SpriteComponent do
 
   def render(assigns) do
     ~L"""
-    <svg viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>" xmlns="http://www.w3.org/2000/svg">
-      <%= for {{x, y}, {base_color, tint}} <- @sprite.map do %>
-        <rect x="<%= x %>" y="<%= y %>" width="1" height="1" fill="<%= fill_color(base_color) %>" fill-opacity="<%= 0.2 + abs((tint / 100.0) - 0.2) %>"/>
-      <% end %>
+    <svg
+      style="width: 64px; height: 64px;"
+      viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>"
+      xmlns="http://www.w3.org/2000/svg"
+      shape-rendering="crispEdges">
+        <%= for {{x, y}, {base_color, tint}} <- @sprite.map do %>
+          <rect
+            x="<%= x %>"
+            y="<%= y %>"
+            width="1"
+            height="1"
+            fill="<%= fill_color(base_color) %>"
+            fill-opacity="<%= 0.2 + abs((tint / 100.0) - 0.2) %>"
+          />
+        <% end %>
     </svg>
     """
   end

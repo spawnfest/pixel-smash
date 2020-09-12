@@ -63,6 +63,7 @@ defmodule PixelSmash.Battles do
     %Fighter{
       id: gladiator.id,
       name: gladiator.name,
+      sprite: gladiator.sprite,
       max_health: gladiator.max_health,
       health: gladiator.max_health,
       strength: gladiator.strength,
