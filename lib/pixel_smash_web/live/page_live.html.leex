@@ -1,4 +1,3 @@
-
 <section>
 <%= case @battle do %>
   <%= %Battles.Battle.Scheduled{} -> %>
@@ -35,6 +34,8 @@
 
 <section class="ml-3 mb-4">
   <div class="box-content h-40 w-40 shadow-lg">
-    <%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
+    <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @left_gladiator.sprite %>
+    <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @right_gladiator.sprite %>
+    <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: PixelSmash.Sprites.generate_sprite(10, 10, &PixelSmash.Sprites.new_pixel/0) %>
   </div>
 </section>

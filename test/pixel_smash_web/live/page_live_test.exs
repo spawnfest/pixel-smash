@@ -4,8 +4,7 @@ defmodule PixelSmashWeb.PageLiveTest do
   import Phoenix.LiveViewTest
 
   test "disconnected and connected render", %{conn: conn} do
-    {:ok, page_live, disconnected_html} = live(conn, "/")
+    {:ok, _page_live, disconnected_html} = live(conn, "/")
     assert disconnected_html =~ "Welcome to PixelSmash Arena!"
-    assert render(page_live) =~ "Welcome to PixelSmash Arena!"
   end
 end

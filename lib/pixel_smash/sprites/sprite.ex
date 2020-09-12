@@ -1,8 +1,9 @@
-defmodule PixelSmash.Gladiators.Grid do
+defmodule PixelSmash.Sprites.Sprite do
   @moduledoc """
-  Helpers for working with grid structures.
+  Helpers for working with sprite structures.
   """
 
+  @derive Jason.Encoder
   defstruct [
     :x,
     :y,
@@ -13,6 +14,20 @@ defmodule PixelSmash.Gladiators.Grid do
 
   @type t() :: %__MODULE__{}
   @type coor() :: {integer(), integer()}
+
+  @default_size 10
+
+  def default_size, do: @default_size
+
+  @doc """
+  Creates a sprite nesting list of pixels into grid.
+  """
+  def new(pixels) when length(pixels) == @default_size * @default_size do
+    size = @default_size
+    data = Enum.chunk_every(pixels, size)
+    map = to_map(data, size, size)
+    %__MODULE__{x: size, y: size, map: map}
+  end
 
   @doc """
   Creates a X by Y grid with with all starting values being `:nil`. A generator function may
@@ -70,18 +85,21 @@ defmodule PixelSmash.Gladiators.Grid do
         generate_row(grid.x, generator_fn)
       end
 
-    # Creates a list of coordinates of the specified grid size
+    map = to_map(data, grid.x, grid.y)
+
+    Map.put(grid, :map, map)
+  end
+
+  defp to_map(data, x_size, y_size) do
     coordinates =
-      for y <- 1..grid.y, x <- 1..grid.x do
+      for y <- 1..y_size, x <- 1..x_size do
         {x, y}
       end
 
     # Finally we flatten the original list of lists
     elements = Enum.flat_map(data, fn x -> x end)
 
-    # And merge it with coordinates to create our "map"
-    map = Enum.zip(coordinates, elements) |> Enum.into(%{})
-    Map.put(grid, :map, map)
+    Enum.zip(coordinates, elements) |> Enum.into(%{})
   end
 
   @spec generate_row(size :: integer(), (() -> term())) :: list()
