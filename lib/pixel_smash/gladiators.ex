@@ -26,8 +26,11 @@ defmodule PixelSmash.Gladiators do
   defp random_magic, do: Enum.random(15..45)
 
   defp random_spells do
-    1..3
-    |> Enum.map(fn _ -> Enum.random(["Freeze Ray", "Fireball", "Gazebo"]) end)
+    num = Enum.random(1..3)
+
+    1..num
+    |> Enum.to_list()
+    |> Enum.map(fn _index -> Faker.Superhero.En.power end)
     |> Enum.uniq()
   end
 

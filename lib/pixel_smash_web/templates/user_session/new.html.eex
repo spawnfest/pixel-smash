@@ -1,25 +1,35 @@
 <h1>Log in</h1>
 
-<%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
-  <%= if @error_message do %>
-    <div class="alert alert-danger">
-      <p><%= @error_message %></p>
+<div class="w-full max-w-xs">
+  <%= form_for @conn, Routes.user_session_path(@conn, :create),
+    [as: :user],
+      fn f -> %>
+    <%= if @error_message do %>
+      <div class="alert alert-danger">
+        <p><%= @error_message %></p>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= label f, :email, class: "block text-gray-500 text-sm font-bold mb-2"%>
+      <%= email_input f, :email, required: true %>
+    </div>
+
+    <div class="mb-4">
+      <%= label f, :password %>
+      <%= password_input f, :password, required: true %>
+    </div>
+
+    <div class="mb-4">
+      <%= label f, :remember_me, "Keep me logged in for 60 days" %>
+      <%= checkbox f, :remember_me %>
+    </div>
+
+    <div>
+      <%= submit "Log in" %>
     </div>
   <% end %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-
-  <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-  <%= checkbox f, :remember_me %>
-
-  <div>
-    <%= submit "Log in" %>
-  </div>
-<% end %>
+</div>
 
 <p>
   <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |

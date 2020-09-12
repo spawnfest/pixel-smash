@@ -9,8 +9,8 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
 
       iex> alias PixelSmash.{Gladiators.SpriteMapper, Sprites.Sprite}
       ...> attributes = [exhaustion: 0, exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80]
-      ...> %Sprite{data: [row1 | _]} = SpriteMapper.sprite(attributes)
-      ...> [{:gray, 100}, {:black, 50}, {:green, 100}, {:red, 10}, {:purple, 60}, {:blue, 80} | _] = row1
+      ...> %Sprite{map: map} = SpriteMapper.sprite(attributes)
+      ...> %{{1, 1} => {:gray, 100}, {2, 1} => {:black, 50}, {3, 1} => {:green, 100}, {4, 1} => {:red, 10}, {5, 1} => {:purple, 60}, {6, 1} => {:blue, 80}} = map
 
   And map a Sprite to list of attributes.
   Last found Pixel's tint value maps to appropriate attribute value.
@@ -50,11 +50,13 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
     Sprites.new_pixel(base_color, value)
   end
 
-  def attributes(%Sprite{data: data}) do
+  def attributes(%Sprite{map: map, x: size_x}) do
     base_colors = Enum.map(@attribute_base_color, &elem(&1, 1))
 
-    data
-    |> List.flatten()
+    map
+    |> Enum.into([])
+    |> Enum.sort(fn {{x1, y1}, _}, {{x2, y2}, _} -> x1+y1*size_x <= x2+y2*size_x end)
+    |> Enum.map(fn {_coords, value} -> value end)
     |> Enum.filter(fn {color, _tint} -> color in base_colors end)
     |> Enum.reduce([], &put_attribute(&2, &1))
     |> Enum.reverse()

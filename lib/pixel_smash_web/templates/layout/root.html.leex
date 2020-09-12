@@ -9,20 +9,30 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
+  <body class="bg-white min-h-screen flex flex-col">
     <header>
-      <section class="container">
-        <nav role="navigation">
+      <section class="container flex flex-row items-center">
+        <h1 class="flex">
+          <div class="flex-auto text-center font-bold text-3xl px-4 py-12">
+            Welcome to PixelSmash Arena!
+          </div>
+          <div class="flex-auto px-4 py-3">
+            <a href="/" >
+              <img src="<%= Routes.static_path(@conn, "/images/logo.png") %>" alt="Pixel Smash Logo"/>
+            </a>
+          </div>
+        </h1>
+        <nav role="navigation" class="flex-auto px-4 py-3">
           <%= render "_user_menu.html", assigns %>
           <ul>
           </ul>
         </nav>
-        <a href="/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
       </section>
     </header>
-    <%= @inner_content %>
+    <div class="fleg-grow flex flex-col">
+      <%= @inner_content %>
+    </div>
+
     <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
       <p style="text-align:center">
         <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
