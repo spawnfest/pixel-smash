@@ -29,13 +29,13 @@ defmodule PixelSmashWeb.SpriteComponent do
 
   defp hsl(base_color) do
     case base_color do
-      :black -> {0, 0, 0}
-      :green -> {120, 100, 25}
-      :blue -> {240, 100, 50}
-      :yellow -> {60, 100, 50}
-      :red -> {0, 100, 50}
-      :purple -> {300, 100, 25}
-      :pink -> {350, 100, 88}
+      :black -> {0, 0, 3}
+      :green -> {76, 100, 71}
+      :blue -> {216, 100, 69}
+      :yellow -> {46, 100, 68}
+      :red -> {1, 100, 70}
+      :purple -> {262, 100, 70}
+      :pink -> {349, 100, 70}
       :gray -> {0, 0, 50}
     end
   end
