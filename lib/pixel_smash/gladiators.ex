@@ -12,65 +12,20 @@ defmodule PixelSmash.Gladiators do
       ...> gladiator == loaded_gladiator
   """
 
-  alias PixelSmash.Gladiators.Gladiator
+  alias PixelSmash.Gladiators.{
+    Store,
+    Supervisor
+  }
 
-  @repo Application.compile_env!(:pixel_smash, :repo)
+  @store Store
 
-  defdelegate build_fighter(gladiator), to: Gladiator
+  defdelegate child_spec(init_arg), to: Supervisor
 
-  def list_gladiators() do
-    Gladiator
-    |> @repo.all()
-    |> Enum.map(&hydrate_gladiator/1)
+  def list_gladiators(store \\ @store) do
+    Store.list_gladiators(store)
   end
 
-  def get_gladiator!(id) do
-    Gladiator
-    |> @repo.get!(id)
-    |> hydrate_gladiator()
-  end
-
-  def persist_gladiator(%Gladiator{} = gladiator) do
-    %Gladiator{}
-    |> Gladiator.gladiator_changeset(%{name: gladiator.name, sprite: gladiator.sprite})
-    |> @repo.insert()
-  end
-
-  def generate_gladiator do
-    [
-      name: random_name(),
-      exhaustion: random_exhaustion(),
-      health: random_health(),
-      strength: random_strength(),
-      speed: random_speed(),
-      magic: random_magic(),
-      spells: random_spells()
-    ]
-    |> Gladiator.new()
-    |> Gladiator.populate_sprite()
-    |> Gladiator.verify_fields!()
-  end
-
-  defp random_name, do: Faker.Person.En.name()
-  defp random_exhaustion, do: Enum.random(60..90)
-  defp random_health, do: Enum.random(50..100)
-  defp random_strength, do: Enum.random(10..30)
-  defp random_speed, do: Enum.random(5..25)
-  defp random_magic, do: Enum.random(15..45)
-
-  defp random_spells do
-    num = Enum.random(1..3)
-
-    1..num
-    |> Enum.to_list()
-    |> Enum.map(fn _index -> Faker.Superhero.En.power() end)
-    |> Enum.uniq()
-  end
-
-  defp hydrate_gladiator(%Gladiator{} = gladiator) do
-    gladiator
-    |> Map.update!(:sprite, &@repo.sprite_from_map(&1))
-    |> Gladiator.populate_attributes()
-    |> Gladiator.verify_fields!()
+  def get_gladiator(store \\ @store, id) do
+    Store.get_gladiator(store, id)
   end
 end

@@ -1,34 +1,36 @@
 defmodule PixelSmash.Gladiators.Gladiator do
-  use Ecto.Schema
-  import Ecto.Changeset
+  import Algae
 
-  alias PixelSmash.Battles.Fighter
-  alias PixelSmash.Gladiators.SpriteMapper
+  alias PixelSmash.Gladiators.{
+    Gladiator,
+    SpriteMapper
+  }
 
-  schema "gladiators" do
-    field :name, :string
-    field :sprite, :map
-    field :exhaustion, :integer, virtual: true
-    field :health, :integer, virtual: true
-    field :strength, :integer, virtual: true
-    field :speed, :integer, virtual: true
-    field :magic, :integer, virtual: true
-    field :spells, {:array, :string}, virtual: true
-
-    timestamps()
+  defdata do
+    id :: String.t()
+    name :: String.t()
+    sprite :: map()
+    max_health :: non_neg_integer()
+    strength :: non_neg_integer()
+    speed :: non_neg_integer()
+    magic :: non_neg_integer()
+    spells :: [String.t()]
   end
 
-  def new(fields) do
-    struct!(__MODULE__, fields)
+  def generate() do
+    %Gladiator{
+      id: Ecto.UUID.generate(),
+      name: Faker.Person.En.name(),
+      max_health: Enum.random(50..100),
+      strength: Enum.random(3..18),
+      speed: Enum.random(1..5),
+      magic: Enum.random(8..30),
+      spells: Faker.Util.sample_uniq(3, &Faker.Superhero.En.power/0)
+    }
+    |> populate_sprite()
   end
 
-  def gladiator_changeset(gladiator, attrs) do
-    gladiator
-    |> cast(attrs, [:name, :sprite])
-    |> validate_required([:name, :sprite])
-  end
-
-  def populate_sprite(%__MODULE__{} = gladiator) do
+  defp populate_sprite(%Gladiator{} = gladiator) do
     attribute? = fn {key, _valu} -> key in [:exhaustion, :health, :strength, :speed, :magic] end
 
     attributes =
@@ -42,39 +44,5 @@ defmodule PixelSmash.Gladiators.Gladiator do
 
   def populate_attributes(%__MODULE__{sprite: sprite} = gladiator) when is_map(sprite) do
     struct!(gladiator, SpriteMapper.attributes(sprite))
-  end
-
-  def verify_fields!(
-        %__MODULE__{
-          name: name,
-          sprite: sprite,
-          exhaustion: exhaustion,
-          health: health,
-          strength: strength,
-          speed: speed,
-          magic: magic,
-          spells: spells
-        } = gladiator
-      )
-      when byte_size(name) > 0
-      when not is_nil(sprite)
-      when exhaustion >= 0
-      when health >= 0
-      when strength >= 0
-      when speed >= 0
-      when magic >= 0
-      when is_list(spells),
-      do: gladiator
-
-  def build_fighter(%__MODULE__{} = gladiator) do
-    Fighter.new(
-      gladiator.name,
-      gladiator.exhaustion,
-      gladiator.health,
-      gladiator.strength,
-      gladiator.speed,
-      gladiator.magic,
-      gladiator.spells
-    )
   end
 end

@@ -61,13 +61,15 @@ defmodule PixelSmash.Battles do
 
   defp fighter_from_gladiator(%Gladiators.Gladiator{} = gladiator) do
     %Fighter{
+      id: gladiator.id,
       name: gladiator.name,
-      exhaustion: 0,
-      health: gladiator.health,
+      max_health: gladiator.max_health,
+      health: gladiator.max_health,
       strength: gladiator.strength,
       speed: gladiator.speed,
       magic: gladiator.magic,
-      spells: gladiator.spells
+      spells: gladiator.spells,
+      exhaustion: 0
     }
   end
 

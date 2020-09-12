@@ -12,9 +12,10 @@ defmodule PixelSmash.Application do
       PixelSmashWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: PixelSmash.PubSub},
+      PixelSmash.Gladiators,
+      PixelSmash.Battles,
       # Start the Endpoint (http/https)
-      PixelSmashWeb.Endpoint,
-      PixelSmash.Battles
+      PixelSmashWeb.Endpoint
     ]
 
     opts = [strategy: :one_for_one, name: PixelSmash.Supervisor]
