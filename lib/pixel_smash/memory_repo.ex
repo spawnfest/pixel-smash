@@ -24,11 +24,15 @@ defmodule PixelSmash.MemoryRepo do
   end
 
   @impl GenServer
-  def handle_call({:insert, %Ecto.Changeset{data: %module{} = entity, changes: changes}}, _from, map) do
+  def handle_call(
+        {:insert, %Ecto.Changeset{data: %module{} = entity, changes: changes}},
+        _from,
+        map
+      ) do
     entity = Map.merge(entity, changes)
 
     list = Map.get(map, module, [])
-    entity = Map.put(entity, :id, length(list)+1)
+    entity = Map.put(entity, :id, length(list) + 1)
     updated_map = Map.put(map, module, List.insert_at(list, -1, entity))
 
     {:reply, {:ok, entity}, updated_map}
@@ -38,7 +42,7 @@ defmodule PixelSmash.MemoryRepo do
     entity =
       map
       |> Map.get(module, [])
-      |> Enum.find(& &1.id == id)
+      |> Enum.find(&(&1.id == id))
 
     {:reply, entity, map}
   end

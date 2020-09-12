@@ -1,4 +1,5 @@
 <%= for battle <- @battles do %>
+<<<<<<< HEAD
   <section>
     <%= case battle do %>
       <%= %Battles.Battle.Scheduled{} -> %>
@@ -60,4 +61,7 @@
         </div>
     <% end %>
   </section>
+=======
+  <%= live_component @socket, BattleComponent, id: battle.id, battle: battle %>
+>>>>>>> create the battle component
 <% end %>
