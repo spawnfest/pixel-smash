@@ -2,6 +2,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias PixelSmash.Battles.Fighter
   alias PixelSmash.Gladiators.SpriteMapper
 
   schema "gladiators" do
@@ -43,11 +44,35 @@ defmodule PixelSmash.Gladiators.Gladiator do
     struct!(gladiator, SpriteMapper.attributes(sprite))
   end
 
-  def verify_fields!(%__MODULE__{} = gladiator) do
-
-  end
+  def verify_fields!(%__MODULE__{
+        name: name,
+        sprite: sprite,
+        exhaustion: exhaustion,
+        health: health,
+        strength: strength,
+        speed: speed,
+        magic: magic,
+        spells: spells
+      } = gladiator)
+      when byte_size(name) > 0
+      when not is_nil(sprite)
+      when exhaustion >= 0
+      when health >= 0
+      when strength >= 0
+      when speed >= 0
+      when magic >= 0
+      when is_list(spells),
+      do: gladiator
 
   def build_fighter(%__MODULE__{} = gladiator) do
-
+    Fighter.new(
+      gladiator.name,
+      gladiator.exhaustion,
+      gladiator.health,
+      gladiator.strength,
+      gladiator.speed,
+      gladiator.magic,
+      gladiator.spells
+    )
   end
 end

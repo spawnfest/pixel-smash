@@ -2,19 +2,24 @@ defmodule PixelSmashWeb.PageLive do
   use PixelSmashWeb, :live_view
 
   alias PixelSmash.Battles
+  alias PixelSmash.Gladiators
 
   @seconds_per_tick 5
 
   @impl true
   def mount(params, session, socket) do
-    left_fighter = generate_fighter()
-    right_fighter = generate_fighter()
+    left_gladiator = Gladiators.generate_gladiator()
+    right_gladiator = Gladiators.generate_gladiator()
+
+    left_fighter = Gladiators.build_fighter(left_gladiator)
+    right_fighter = Gladiators.build_fighter(right_gladiator)
 
     {:ok, battle_server} = Battles.schedule_battle(left_fighter, right_fighter)
 
     socket =
       socket
       |> assign_defaults(params, session)
+      |> assign(left_gladiator: left_gladiator, right_gladiator: right_gladiator)
       |> assign(:battle_server, battle_server)
       |> assign(:battle, Battles.get_battle(battle_server))
       |> assign(:battle_log, [])
@@ -50,22 +55,4 @@ defmodule PixelSmashWeb.PageLive do
   defp schedule_next_tick() do
     Process.send_after(self(), :tick, @seconds_per_tick * 1000)
   end
-
-  defp generate_fighter() do
-    Battles.Fighter.new(
-      random_name(),
-      0,
-      random_attribute_value(:health),
-      random_attribute_value(:strength),
-      random_attribute_value(:speed),
-      random_attribute_value(:magic),
-      ["Freeze Ray"]
-    )
-  end
-
-  defp random_name, do: Faker.Person.En.name()
-  defp random_attribute_value(:health), do: Enum.random(50..100)
-  defp random_attribute_value(:strength), do: Enum.random(10..30)
-  defp random_attribute_value(:speed), do: Enum.random(5..25)
-  defp random_attribute_value(:magic), do: Enum.random(15..45)
 end

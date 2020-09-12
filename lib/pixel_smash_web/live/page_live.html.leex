@@ -25,4 +25,5 @@
     <% end %>
 <% end %>
 
-<%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: PixelSmash.Sprites.generate_sprite(10) %>
+<%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @left_gladiator.sprite %>
+<%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @right_gladiator.sprite %>

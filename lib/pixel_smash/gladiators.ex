@@ -13,6 +13,7 @@ defmodule PixelSmash.Gladiators do
     ]
     |> Gladiator.new()
     |> Gladiator.populate_sprite()
+    |> Gladiator.verify_fields!()
   end
 
   defp random_name, do: Faker.Person.En.name()
@@ -27,4 +28,6 @@ defmodule PixelSmash.Gladiators do
     |> Enum.map(fn _ -> Enum.random(["Freeze Ray", "Fireball", "Gazebo"]) end)
     |> Enum.uniq()
   end
+
+  defdelegate build_fighter(gladiator), to: Gladiator
 end

@@ -25,6 +25,7 @@ defmodule PixelSmashWeb.SpriteComponent do
       :red -> {0, 100, 50}
       :purple -> {300, 100, 25}
       :pink -> {350, 100, 88}
+      :gray -> {0, 0, 50}
     end
   end
 end
