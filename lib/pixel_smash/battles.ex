@@ -17,7 +17,7 @@ defmodule PixelSmash.Battles do
     |> Enum.map(&fighter_from_gladiator/1)
     |> Enum.shuffle()
     |> Enum.chunk_every(2)
-    |> Enum.map(fn [left, right] -> schedule_battle(battle_supervisor, left, right) end)
+    |> Enum.each(fn [left, right] -> schedule_battle(battle_supervisor, left, right) end)
   end
 
   def schedule_battle(
