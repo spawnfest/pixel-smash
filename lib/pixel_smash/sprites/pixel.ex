@@ -10,7 +10,10 @@ defmodule PixelSmash.Sprites.Pixel do
   at the module level
   """
   def new() do
-    Enum.random @colors
+    new(Enum.random(@colors), 100)
   end
 
+  def new(base_color, tint) when tint in 0..100 do
+    {base_color, tint}
+  end
 end
