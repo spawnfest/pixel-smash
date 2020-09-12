@@ -17,12 +17,16 @@ defmodule PixelSmash.Gladiators do
 
   defdelegate build_fighter(gladiator), to: Gladiator
 
+  def list_gladiators() do
+    Gladiator
+    |> Repo.all()
+    |> Enum.map(&hydrate_gladiator/1)
+  end
+
   def get_gladiator!(id) do
     Gladiator
     |> Repo.get!(id)
-    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
-    |> Gladiator.populate_attributes()
-    |> Gladiator.verify_fields!()
+    |> hydrate_gladiator()
   end
 
   def persist_gladiator(%Gladiator{} = gladiator) do
@@ -60,5 +64,12 @@ defmodule PixelSmash.Gladiators do
     |> Enum.to_list()
     |> Enum.map(fn _index -> Faker.Superhero.En.power() end)
     |> Enum.uniq()
+  end
+
+  defp hydrate_gladiator(%Gladiator{} = gladiator) do
+    gladiator
+    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
+    |> Gladiator.populate_attributes()
+    |> Gladiator.verify_fields!()
   end
 end
