@@ -40,7 +40,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
     %{gladiator | sprite: SpriteMapper.sprite(attributes)}
   end
 
-  def populate_attributes(%__MODULE__{} = gladiator, sprite) when is_binary(sprite) do
+  def populate_attributes(%__MODULE__{sprite: sprite} = gladiator) when is_binary(sprite) do
     struct!(gladiator, SpriteMapper.attributes(sprite))
   end
 
