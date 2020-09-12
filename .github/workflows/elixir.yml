@@ -1,5 +1,8 @@
 name: Elixir CI
 
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 on:
   push:
     branches: [ master ]
@@ -11,9 +14,6 @@ jobs:
 
     name: Build and test
     runs-on: ubuntu-latest
-
-    env:
-      GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
@@ -44,5 +44,4 @@ jobs:
     - name: Setup db
       run: mix ecto.create
     - name: Run tests
-      run: mix test
       run: mix coveralls.github
