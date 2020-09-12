@@ -89,6 +89,7 @@ defmodule PixelSmashWeb do
 
       import PixelSmashWeb.ErrorHelpers
       import PixelSmashWeb.Gettext
+      import PixelSmashWeb.MountHelpers
       alias PixelSmashWeb.Router.Helpers, as: Routes
     end
   end

@@ -225,7 +225,9 @@ defmodule PixelSmash.Accounts do
   @doc """
   Gets the user with the given signed token.
   """
-  def get_user_by_session_token(token) do
+  def get_user_by_session_token(nil), do: nil
+
+  def get_user_by_session_token(token) when is_binary(token) do
     {:ok, query} = UserToken.verify_session_token_query(token)
     Repo.one(query)
   end

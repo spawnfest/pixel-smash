@@ -2,8 +2,13 @@ defmodule PixelSmashWeb.PageLive do
   use PixelSmashWeb, :live_view
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+  def mount(params, session, socket) do
+    socket =
+      socket
+      |> assign_defaults(params, session)
+      |> assign(query: "", results: %{})
+
+    {:ok, socket}
   end
 
   @impl true
@@ -13,15 +18,23 @@ defmodule PixelSmashWeb.PageLive do
 
   @impl true
   def handle_event("search", %{"q" => query}, socket) do
-    case search(query) do
-      %{^query => vsn} ->
-        {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
+    case socket.assigns.current_user do
+      nil ->
+        raise "NOT LOGGED IN"
 
-      _ ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-         |> assign(results: %{}, query: query)}
+      user ->
+        IO.inspect(user)
+
+        case search(query) do
+          %{^query => vsn} ->
+            {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
+
+          _ ->
+            {:noreply,
+             socket
+             |> put_flash(:error, "No dependencies found matching \"#{query}\"")
+             |> assign(results: %{}, query: query)}
+        end
     end
   end
 
