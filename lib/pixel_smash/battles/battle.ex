@@ -73,7 +73,7 @@ defmodule PixelSmash.Battles.Battle do
 
   def take_turn(%Fighter{} = fighter, %Fighter{} = opponent) do
     action = choose_action(fighter, opponent)
-    {fighter, opponent} = apply_action(fighter, opponent, action)
+    {fighter, opponent} = Action.apply(action, fighter, opponent)
     fighter = apply_exhaustion(fighter, action)
 
     {fighter, opponent, action}
@@ -100,39 +100,8 @@ defmodule PixelSmash.Battles.Battle do
     end
   end
 
-  def apply_action(%Fighter{} = fighter, %Fighter{} = opponent, %Action.Attack{} = action) do
-    result = %Fighter{
-      action.target
-      | health: max(0, action.target.health - action.damage)
-    }
-
-    case action.target do
-      ^fighter -> {result, opponent}
-      ^opponent -> {fighter, result}
-    end
-  end
-
-  def apply_action(%Fighter{} = fighter, %Fighter{} = opponent, %Action.Cast{} = action) do
-    result = %Fighter{
-      action.target
-      | health: max(0, action.target.health - action.damage)
-    }
-
-    case action.target do
-      ^fighter -> {result, opponent}
-      ^opponent -> {fighter, result}
-    end
-  end
-
   def apply_exhaustion(%Fighter{} = fighter, action) do
-    cost =
-      case action do
-        %Action.Attack{} ->
-          7
-
-        %Action.Cast{} ->
-          11
-      end
+    cost = Action.energy_cost(action)
 
     %Fighter{fighter | exhaustion: fighter.exhaustion + cost}
   end
