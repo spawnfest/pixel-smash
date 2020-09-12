@@ -50,4 +50,4 @@ jobs:
     - name: Setup db
       run: mix ecto.create
     - name: Run tests
-      run: MEX_ENV=test mix coveralls.github
+      run: MIX_ENV=test mix coveralls.github
