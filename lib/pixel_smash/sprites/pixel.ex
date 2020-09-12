@@ -1,4 +1,4 @@
-defmodule PixelSmash.Gladiators.Pixel do
+defmodule PixelSmash.Sprites.Pixel do
   @moduledoc """
   Helpers for working with pixel generation.
   """

@@ -1,27 +1,27 @@
-defmodule PixelSmash.Gladiators.Grid do
+defmodule PixelSmash.Sprites.Sprite do
   @moduledoc """
-  Helpers for working with grid structures.
+  Helpers for working with sprite structures.
   """
 
   defstruct [:x, :y, :data, :map]
 
-  alias PixelSmash.Gladiators.Pixel
+  alias PixelSmash.Sprites.Pixel
 
   @doc """
-  Creates a 10x10 grid with pre-assigned colors, it is possible to create
+  Creates a sprite with random pre-assigned colors, it is possible to create
   grids of different sizes by passing an integer as parameter.
 
-  Grids are always mirrored in the y-vertical axis.
+  Sprites are always mirrored in the y-vertical axis.
   """
-  def new(size \\ 10) when is_integer(size) and size > 1 do
+  def new(size) when is_integer(size) and size > 1 do
     data = Enum.map(1..size, fn _x -> half_row(size) end)
     map = to_map(data, size)
     %__MODULE__{x: size, y: size, data: data, map: map}
   end
 
-  def apply(grid, shape, _at \\ {0, 0}) when is_list(grid) and is_list(shape) do
-    # Brittle way of getting the grid size
-    size = Enum.count(grid)
+  def apply(sprite, shape, _at \\ {0, 0}) when is_list(sprite) and is_list(shape) do
+    # Brittle way of getting the sprite size
+    size = Enum.count(sprite)
 
     # Getting the size is useful for creating a range of coordinates
     coordinates =
@@ -29,36 +29,37 @@ defmodule PixelSmash.Gladiators.Grid do
         {y, x}
       end
 
-    elements = Enum.flat_map(grid, fn x -> x end)
+    elements = Enum.flat_map(sprite, fn x -> x end)
 
     Enum.zip(coordinates, elements) |> Enum.into(%{})
   end
 
-  defp to_map(grid, size) do
+  defp to_map(sprite, size) do
     coordinates =
       for y <- 1..size, x <- 1..size do
         {y, x}
       end
 
-    elements = Enum.flat_map(grid, fn x -> x end)
+    elements = Enum.flat_map(sprite, fn x -> x end)
 
     Enum.zip(coordinates, elements) |> Enum.into(%{})
   end
 
-  # defp to_map(%__MODULE__{} = grid) when grid.x == grid.y do
+  # defp to_map(%__MODULE__{} = sprite) when sprite.x == sprite.y do
   #  coordinates =
-  #    for y <- 1..grid.y, x <- 1..grid.y do
+  #    for y <- 1..sprite.y, x <- 1..sprite.y do
   #      {y, x}
   #    end
 
-  #  elements = Enum.flat_map(grid.data, fn x -> x end)
+  #  elements = Enum.flat_map(sprite.data, fn x -> x end)
 
   #  Enum.zip(coordinates, elements) |> Enum.into(%{})
-  #  Map.put(grid, :)
+  #  Map.put(sprite, :)
   # end
 
   @doc """
-  Generates half a row, mirrors it and merges it with its other half.
+  Generates half a row of random colored pixels,
+  mirrors it and merges it with its other half.
   """
   defp half_row(size) do
     half = div(size, 2)
