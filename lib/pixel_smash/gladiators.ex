@@ -12,9 +12,24 @@ defmodule PixelSmash.Gladiators do
       ...> gladiator == loaded_gladiator
   """
 
-  import Ecto.Query, warn: false
   alias PixelSmash.Gladiators.Gladiator
   alias PixelSmash.Repo
+
+  defdelegate build_fighter(gladiator), to: Gladiator
+
+  def get_gladiator!(id) do
+    Gladiator
+    |> Repo.get!(id)
+    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
+    |> Gladiator.populate_attributes()
+    |> Gladiator.verify_fields!()
+  end
+
+  def persist_gladiator(%Gladiator{} = gladiator) do
+    %Gladiator{}
+    |> Gladiator.gladiator_changeset(%{name: gladiator.name, sprite: gladiator.sprite})
+    |> Repo.insert()
+  end
 
   def generate_gladiator do
     [
@@ -45,21 +60,5 @@ defmodule PixelSmash.Gladiators do
     |> Enum.to_list()
     |> Enum.map(fn _index -> Faker.Superhero.En.power() end)
     |> Enum.uniq()
-  end
-
-  defdelegate build_fighter(gladiator), to: Gladiator
-
-  def persist_gladiator(%Gladiator{} = gladiator) do
-    %Gladiator{}
-    |> Gladiator.gladiator_changeset(%{name: gladiator.name, sprite: gladiator.sprite})
-    |> Repo.insert()
-  end
-
-  def get_gladiator!(id) do
-    Gladiator
-    |> Repo.get!(id)
-    |> Map.update!(:sprite, &Repo.sprite_from_map(&1))
-    |> Gladiator.populate_attributes()
-    |> Gladiator.verify_fields!()
   end
 end
