@@ -55,7 +55,7 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
 
     map
     |> Enum.into([])
-    |> Enum.sort(fn {{x1, y1}, _}, {{x2, y2}, _} -> x1+y1*size_x <= x2+y2*size_x end)
+    |> Enum.sort(fn {{x1, y1}, _}, {{x2, y2}, _} -> x1 + y1 * size_x <= x2 + y2 * size_x end)
     |> Enum.map(fn {_coords, value} -> value end)
     |> Enum.filter(fn {color, _tint} -> color in base_colors end)
     |> Enum.reduce([], &put_attribute(&2, &1))

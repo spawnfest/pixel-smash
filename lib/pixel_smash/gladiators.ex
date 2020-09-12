@@ -43,7 +43,7 @@ defmodule PixelSmash.Gladiators do
 
     1..num
     |> Enum.to_list()
-    |> Enum.map(fn _index -> Faker.Superhero.En.power end)
+    |> Enum.map(fn _index -> Faker.Superhero.En.power() end)
     |> Enum.uniq()
   end
 

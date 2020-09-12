@@ -7,7 +7,9 @@ defmodule PixelSmash.Repo do
 
   def sprite_from_map(map) when is_map(map) do
     map
-    |> Enum.reduce(%Sprite{}, fn {key, value}, sprite -> Map.put(sprite, String.to_existing_atom(key), value) end)
+    |> Enum.reduce(%Sprite{}, fn {key, value}, sprite ->
+      Map.put(sprite, String.to_existing_atom(key), value)
+    end)
     |> Map.update!(:map, &map_to_coordinates_and_colors(&1))
   end
 

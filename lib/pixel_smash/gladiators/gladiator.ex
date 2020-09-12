@@ -44,16 +44,18 @@ defmodule PixelSmash.Gladiators.Gladiator do
     struct!(gladiator, SpriteMapper.attributes(sprite))
   end
 
-  def verify_fields!(%__MODULE__{
-        name: name,
-        sprite: sprite,
-        exhaustion: exhaustion,
-        health: health,
-        strength: strength,
-        speed: speed,
-        magic: magic,
-        spells: spells
-      } = gladiator)
+  def verify_fields!(
+        %__MODULE__{
+          name: name,
+          sprite: sprite,
+          exhaustion: exhaustion,
+          health: health,
+          strength: strength,
+          speed: speed,
+          magic: magic,
+          spells: spells
+        } = gladiator
+      )
       when byte_size(name) > 0
       when not is_nil(sprite)
       when exhaustion >= 0
