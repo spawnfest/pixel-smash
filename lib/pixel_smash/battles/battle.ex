@@ -10,15 +10,18 @@ defmodule PixelSmash.Battles.Battle do
 
   defsum do
     defdata Scheduled do
+      id :: String.t()
       fighters :: {Fighter.t(), Fighter.t()} \\ nil
     end
 
     defdata InProgress do
+      id :: String.t()
       fighters :: {Fighter.t(), Fighter.t()} \\ nil
       log :: Log.t()
     end
 
     defdata Finished do
+      id :: String.t()
       winner :: Fighter.t()
       loser :: Fighter.t()
       log :: Log.t()
@@ -26,11 +29,11 @@ defmodule PixelSmash.Battles.Battle do
   end
 
   def schedule(%Fighter{} = left, %Fighter{} = right) do
-    Battle.Scheduled.new({left, right})
+    Battle.Scheduled.new(Ecto.UUID.generate(), {left, right})
   end
 
   def start(%Battle.Scheduled{} = battle) do
-    Battle.InProgress.new(battle.fighters)
+    Battle.InProgress.new(battle.id, battle.fighters)
   end
 
   def narrate(%Battle.InProgress{} = battle) do
@@ -125,10 +128,10 @@ defmodule PixelSmash.Battles.Battle do
   def check_if_finished(%Battle.InProgress{fighters: {left, right}} = battle) do
     case {left.health, right.health} do
       {n, _} when n <= 0 ->
-        %Battle.Finished{winner: right, loser: left, log: battle.log}
+        %Battle.Finished{id: battle.id, winner: right, loser: left, log: battle.log}
 
       {_, n} when n <= 0 ->
-        %Battle.Finished{winner: left, loser: right, log: battle.log}
+        %Battle.Finished{id: battle.id, winner: left, loser: right, log: battle.log}
 
       _ ->
         battle
