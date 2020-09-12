@@ -4,6 +4,8 @@ defmodule PixelSmashWeb.PageLive do
   alias PixelSmash.Battles
   alias PixelSmashWeb.BattleComponentLive, as: BattleComponent
 
+  @seconds_per_tick 5
+
   @impl true
   def mount(params, session, socket) do
     socket =
@@ -17,7 +19,18 @@ defmodule PixelSmashWeb.PageLive do
   end
 
   @impl true
-  def handle_info({BattleComponent, :tick}, socket) do
+  def handle_event("start_battle", %{"id" => id}, socket) do
+    battle = Battles.get_battle(id)
+    :ok = Battles.start_battle(battle)
+    send(self(), :tick)
+
+    {:noreply, assign(socket, battles: Battles.list_battles())}
+  end
+
+  @impl true
+  def handle_info(:tick, socket) do
+    schedule_next_tick()
+
     socket =
       socket
       |> assign(:battles, Battles.list_battles())
@@ -25,11 +38,7 @@ defmodule PixelSmashWeb.PageLive do
     {:noreply, socket}
   end
 
-  def handle_info(:tick, socket) do
-    socket =
-      socket
-      |> assign(:battles, Battles.list_battles())
-
-    {:noreply, socket}
+  defp schedule_next_tick() do
+    Process.send_after(self(), :tick, @seconds_per_tick * 1000)
   end
 end
