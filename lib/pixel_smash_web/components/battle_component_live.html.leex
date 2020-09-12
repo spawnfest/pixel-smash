@@ -1,8 +1,8 @@
-<section>
-  <%= case @battle do %>
-    <%= %Battles.Battle.Scheduled{} -> %>
-      <% {left, right} = @battle.fighters %>
-      <div class="max-w-xs rounded shadow-lg mx-3 my-5 bg-purple-200">
+<section class="flex w-1/4">
+  <div class="max-w-lg rounded shadow-lg mx-10 my-5 bg-purple-200">
+    <%= case @battle do %>
+      <%= %Battles.Battle.Scheduled{} -> %>
+        <% {left, right} = @battle.fighters %>
           <div class="">
             <h2 class="m-3 text-lg text-left text-gray-800">
               <span class="font-bold">Upcoming:</span>
@@ -12,10 +12,17 @@
               <span class="font-bold text-xl text-">vs.</span>
               <br>
               <%= right.name %>
-               <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: left.sprite %>
-              <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: right.sprite %>
+                <div class="flex">
+                  <div class="m-2">
+                    <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: left.sprite %>
+                  </div>
+                  <div class="m-2">
+                    <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: right.sprite %>
+                  </div>
+                </div>
             </h2>
           </div>
+
           <div class="px-5 mt-3">
             <button class="bg-blue-600 hover:bg-blue-300 py-2 px-4 rounded shadow-lg capitalize"
               phx-click="start_battle"
@@ -23,9 +30,8 @@
               Start Battle!
             </button>
           </div>
-      </div>
 
-    <% %Battles.Battle.InProgress{} -> %>
+      <% %Battles.Battle.InProgress{} -> %>
         <% {left, right} = @battle.fighters %>
         <div class="flex">
           <div class="py-10">
@@ -47,15 +53,12 @@
           <div class="py-10">
             <h2 class="ml-3 py-1 text-lg text-left text-gray-800 content-center w-7/10">
               <span class="font-bold">Finished!</span>
+                <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @battle.winner.sprite %>
               <h2>Winner: <%= @battle.winner.name %></h2>
               <h2>Loser: <%= @battle.loser.name %></h2>
             </h2>
           </div>
-          <div class="px-5 py-10">
-            <%= for line <- Battles.narrate_battle(Battles.get_battle(@battle.id)) do %>
-              <p><%= line %></p>
-            <% end %>
-          </div>
         </div>
+      </div>
     <% end %>
 </section>

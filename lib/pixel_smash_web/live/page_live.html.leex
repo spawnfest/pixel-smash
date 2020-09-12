@@ -1,3 +1,5 @@
-<%= for battle <- @battles do %>
-  <%= live_component @socket, BattleComponent, battle: battle %>
-<% end %>
+<div class="flex flex-wrap mb-4">
+  <%= for battle <- @battles do %>
+    <%= live_component @socket, BattleComponent, battle: battle %>
+  <% end %>
+</div>
