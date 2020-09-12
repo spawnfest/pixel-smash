@@ -8,6 +8,11 @@ defmodule PixelSmash.Sprites do
     Sprite.new(size)
   end
 
-  defdelegate new_sprite(pixels), to: Sprite, as: :new
+  def new_sprite(pixels) do
+    count = Sprite.default_size() * Sprite.default_size() - length(pixels)
+    fitting_pixels = pixels ++ Pixel.background(count)
+    Sprite.new(fitting_pixels)
+  end
+
   defdelegate new_pixel(base_color, tint), to: Pixel, as: :new
 end

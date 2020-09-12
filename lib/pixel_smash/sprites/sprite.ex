@@ -9,6 +9,8 @@ defmodule PixelSmash.Sprites.Sprite do
 
   @default_size 10
 
+  def default_size, do: @default_size
+
   @doc """
   Creates a sprite with random pre-assigned colors, it is possible to create
   grids of different sizes by passing an integer as parameter.
@@ -17,15 +19,18 @@ defmodule PixelSmash.Sprites.Sprite do
   """
   def new(size \\ @default_size) when is_integer(size) and size > 1 do
     data = Enum.map(1..size, fn _x -> half_row(size) end)
-    new(data)
+    map = to_map(data, size)
+    %__MODULE__{x: size, y: size, data: data, map: map}
   end
 
   @doc """
-  Creates a sprite packing list of pixels into grid
+  Creates a sprite nesting list of pixels into grid.
   """
-  def new(pixels) when length(pixels) == @default_size do
-    map = to_map(pixels, @default_size)
-    %__MODULE__{x: @default_size, y: @default_size, data: pixels, map: map}
+  def new(pixels) when length(pixels) == @default_size * @default_size do
+    size = @default_size
+    data = Enum.chunk_every(pixels, size)
+    map = to_map(data, size)
+    %__MODULE__{x: size, y: size, data: data, map: map}
   end
 
   def apply(sprite, shape, _at \\ {0, 0}) when is_list(sprite) and is_list(shape) do

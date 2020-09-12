@@ -1,4 +1,16 @@
 defmodule PixelSmash.Gladiators.SpriteMapper do
+  @moduledoc """
+  Module to map Gladiator attributes to Sprite Pixels and vice versa.
+
+  ## Examples
+
+      iex> alias PixelSmash.Gladiators.SpriteMapper
+      ...> alias PixelSmash.Sprites.Sprite
+      iex> attributes = [exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80]
+      ...> %Sprite{data: [row1 | _]} = SpriteMapper.sprite(attributes)
+      ...> [{:black, 50}, {:green, 100}, {:red, 10}, {:purple, 60}, {:blue, 80} | _] = row1
+  """
+
   alias PixelSmash.Sprites
   alias PixelSmash.Sprites.Sprite
 
@@ -23,11 +35,10 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
         _ -> nil
       end)
 
-    tint = div(value, 33)
-
-    Sprites.new_pixel(base_color, tint)
+    Sprites.new_pixel(base_color, value)
   end
 
   def attributes(%Sprite{map: map} = sprite) do
+
   end
 end

@@ -17,13 +17,24 @@ defmodule PixelSmash.Gladiators.Gladiator do
     timestamps()
   end
 
+  def new!(fields) do
+    struct!(__MODULE__, fields)
+  end
+
   def gladiator_changeset(gladiator, attrs) do
     gladiator
     |> cast(attrs, [:name, :sprite])
     |> validate_required([:name, :sprite])
   end
 
-  def populate_sprite(%__MODULE__{} = gladiator, attributes) when is_list(attributes) do
+  def populate_sprite(%__MODULE__{} = gladiator) do
+    attribute? = fn {key, _valu} -> key in [:exhaustion, :health, :strength, :speed, :magic] end
+
+    attributes =
+      gladiator
+      |> Enum.filter(attribute?)
+      |> Enum.into(%{})
+
     %{gladiator | sprite: SpriteMapper.sprite(attributes)}
   end
 
@@ -31,6 +42,9 @@ defmodule PixelSmash.Gladiators.Gladiator do
     struct!(gladiator, SpriteMapper.attributes(sprite))
   end
 
-  def verify_fields!(gladiator) do
+  def verify_fields!(%__MODULE__{} = gladiator) do
+  end
+
+  def build_fighter(%__MODULE__{} = gladiator) do
   end
 end
