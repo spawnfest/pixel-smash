@@ -1,4 +1,17 @@
 defmodule PixelSmash.Gladiators do
+  @moduledoc """
+  Gladiators context. Generates and persists Gladiator into DB.
+
+  ## Examples
+
+      iex> alias PixelSmash.Gladiators
+      ...> import Gladiators
+      ...> gladiator = generate_gladiator()
+      ...> {:ok, %{id: id}} = persist_gladiator(gladiator)
+      ...> loaded_gladiator = get_gladiator!(id)
+      ...> gladiator == loaded_gladiator
+  """
+
   import Ecto.Query, warn: false
   alias PixelSmash.Gladiators.Gladiator
   alias PixelSmash.Repo
