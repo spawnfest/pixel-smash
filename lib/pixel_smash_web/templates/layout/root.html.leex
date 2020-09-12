@@ -34,7 +34,7 @@
     </div>
 
     <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-      <p style="text-align:center">
+      <p class="text-center mt-3 text-gray-900 bg-blue-600 rounded-lg">
         <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
       </p>
     <% end %>

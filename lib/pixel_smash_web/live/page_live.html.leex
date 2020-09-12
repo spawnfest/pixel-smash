@@ -3,11 +3,17 @@
 <%= case @battle do %>
   <%= %Battles.Battle.Scheduled{} -> %>
     <% {left, right} = @battle.fighters %>
-    <div class="py-10">
-      <h2 class="h-2 py-1">Upcoming: <%= left.name %> vs. <%= right.name %></h2>
-    </div>
-    <div>
-      <button class="bg-blue-500 hover:bg-blue-500 py-2 px-4 rounded" phx-click="start_battle">Start Battle!</button>
+    <div class="flex">
+      <div class="py-10">
+        <h2 class="ml-3 py-1 text-lg text-left text-gray-800 content-center w-7/10">
+          <span class="font-bold">Upcoming:</span>
+          <%= left.name %> <span class="font-bold text-xl">vs.</span>
+          <%= right.name %>
+        </h2>
+      </div>
+      <div class="px-5 py-10">
+        <button class="bg-blue-600 hover:bg-blue-300 py-2 px-4 rounded shadow-lg capitalize" phx-click="start_battle">Start Battle!</button>
+      </div>
     </div>
   <% %Battles.Battle.InProgress{} -> %>
     <% {left, right} = @battle.fighters %>
@@ -27,6 +33,8 @@
   <% end %>
 </section>
 
-<section class="py-3">
-  <%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
+<section class="ml-3 mb-4">
+  <div class="box-content h-40 w-40 shadow-lg">
+    <%= live_component @socket, PixelSmashWeb.GridComponent, grid: PixelSmash.Gladiators.Grid.new(10, 10, &PixelSmash.Gladiators.Pixel.new/0) %>
+  </div>
 </section>
