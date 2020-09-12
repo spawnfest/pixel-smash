@@ -14,7 +14,8 @@ defmodule PixelSmash.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: PixelSmash.PubSub},
       # Start the Endpoint (http/https)
-      PixelSmashWeb.Endpoint
+      PixelSmashWeb.Endpoint,
+      PixelSmash.Simulator
       # Start a worker by calling: PixelSmash.Worker.start_link(arg)
       # {PixelSmash.Worker, arg}
     ]
