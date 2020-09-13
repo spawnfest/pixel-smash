@@ -3,7 +3,7 @@ defmodule PixelSmashWeb.GladiatorComponent do
 
   def render(assigns) do
     ~L"""
-      <div class="flex items-start items-center space-x-4">
+      <div class="flex items-start items-center space-x-4" phx-click="show_gladiator" phx-value-id="<%= @gladiator.id %>" %>
         <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @gladiator.sprite %>
         <div>
           <h2 class="text-lg font-semibold text-gray-100 -mt-1">

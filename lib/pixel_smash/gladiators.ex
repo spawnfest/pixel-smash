@@ -18,7 +18,7 @@ defmodule PixelSmash.Gladiators do
     Store.list_gladiators(store)
   end
 
-  @spec list_gladiators_by_elo(GenServer.name()) :: [Gladiator]
+  @spec list_gladiators_by_elo(atom(), GenServer.name()) :: [Gladiator]
   def list_gladiators_by_elo(sort_order \\ :desc, store \\ @store) do
     Store.list_gladiators_by_elo(store, sort_order)
   end

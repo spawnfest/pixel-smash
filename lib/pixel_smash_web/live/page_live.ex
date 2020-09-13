@@ -52,6 +52,11 @@ defmodule PixelSmashWeb.PageLive do
     {:noreply, socket}
   end
 
+  def handle_event("show_gladiator", %{"id" => id}, socket) do
+    IO.inspect("show gladiator #{id}")
+    {:noreply, push_redirect(socket, to: "/gladiator/#{id}")}
+  end
+
   @impl true
   def handle_info(:tick, %{assigns: %{sort_order: sort_order}} = socket) do
     schedule_next_tick()
