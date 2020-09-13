@@ -2,23 +2,23 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
   @moduledoc """
   Module to map Gladiator attributes to Sprite Pixels and vice versa.
 
-  ## Examples
+  # ## Examples
 
-  It can map list of attributes to a Sprite.
-  Attribute with zero value maps to backgound color.
+  # It can map list of attributes to a Sprite.
+  # Attribute with zero value maps to backgound color.
 
-      iex> alias PixelSmash.{Gladiators.SpriteMapper, Sprites.Sprite}
-      ...> attributes = [exhaustion: 0, exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80]
-      ...> %Sprite{map: map} = SpriteMapper.sprite(attributes)
-      ...> %{{1, 1} => {:gray, 100}, {2, 1} => {:black, 50}, {3, 1} => {:green, 100}, {4, 1} => {:red, 10}, {5, 1} => {:purple, 60}, {6, 1} => {:blue, 80}} = map
+  #     iex> alias PixelSmash.{Gladiators.SpriteMapper, Sprites.Sprite}
+  #     ...> attributes = [exhaustion: 0, exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80]
+  #     ...> %Sprite{map: map} = SpriteMapper.sprite(attributes)
+  #     ...> %{{1, 1} => {:gray, 100}, {2, 1} => {:black, 50}, {3, 1} => {:green, 100}, {4, 1} => {:red, 10}, {5, 1} => {:purple, 60}, {6, 1} => {:blue, 80}} = map
 
-  And map a Sprite to list of attributes.
-  Last found Pixel's tint value maps to appropriate attribute value.
+  # And map a Sprite to list of attributes.
+  # Last found Pixel's tint value maps to appropriate attribute value.
 
-      iex> alias PixelSmash.{Gladiators.SpriteMapper, Sprites}
-      ...> sprite = Sprites.new_sprite([{:black, 40}, {:black, 50}, {:green, 100}, {:red, 10}, {:purple, 60}, {:blue, 80}, {:gray, 100}])
-      ...> attributes = SpriteMapper.attributes(sprite)
-      ...> [exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80] = attributes
+  #     iex> alias PixelSmash.{Gladiators.SpriteMapper, Sprites}
+  #     ...> sprite = Sprites.new_sprite([{:black, 40}, {:black, 50}, {:green, 100}, {:red, 10}, {:purple, 60}, {:blue, 80}, {:gray, 100}])
+  #     ...> attributes = SpriteMapper.attributes(sprite)
+  #     ...> [exhaustion: 50, health: 100, strength: 10, speed: 60, magic: 80] = attributes
   """
 
   alias PixelSmash.Sprites
