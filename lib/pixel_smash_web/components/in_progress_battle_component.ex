@@ -1,4 +1,7 @@
 defmodule PixelSmashWeb.InProgressBattleComponent do
+  @moduledoc """
+  Handles all of the logic for displaying the battles that are currently in progress.
+  """
   use PixelSmashWeb, :live_component
 
   alias PixelSmash.Battles

@@ -1,4 +1,7 @@
 defmodule PixelSmashWeb.ItemComponent do
+  @moduledoc """
+  Renders the display of the items available in the shop
+  """
   use PixelSmashWeb, :live_component
 
   @impl true
