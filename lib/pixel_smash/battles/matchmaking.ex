@@ -220,11 +220,31 @@ defmodule PixelSmash.Battles.Matchmaking do
         "Terminating battle as a draw, combatants: {#{left.id}, #{right.id}}"
       end)
 
+      battle =
+        case BattleServer.get_battle(pid) do
+          %Battle.Finished{} = battle ->
+            %{battle | outcome: :draw}
+
+          %Battle.InProgress{} = battle ->
+            %Battle.Finished{
+              id: battle.id,
+              fighters: battle.fighters,
+              outcome: :draw,
+              log: battle.log
+            }
+        end
+
       :ok =
         Gladiators.register_battle_result(
           {Gladiators.get_gladiator(left.id), Gladiators.get_gladiator(right.id)},
-          :draw
+          battle.outcome
         )
+
+      Phoenix.PubSub.broadcast(
+        PixelSmash.PubSub,
+        "battles:*",
+        {:battle_finished, battle}
+      )
 
       Process.demonitor(ref)
       BattleSupervisor.terminate_battle_server(pid)

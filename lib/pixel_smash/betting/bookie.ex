@@ -135,7 +135,7 @@ defmodule PixelSmash.Betting.Bookie do
         state
 
       {{odds, bets}, closed_books} ->
-        Enum.each(bets, &handle_bet_outcome(&1, battle.outcome, odds))
+        Enum.each(bets, &handle_bet_outcome(&1, battle, odds))
 
         %{
           state
@@ -175,21 +175,33 @@ defmodule PixelSmash.Betting.Bookie do
     Decimal.to_integer(total)
   end
 
-  defp handle_bet_outcome({user, side, amount}, outcome, odds) do
+  defp handle_bet_outcome({user, side, amount}, battle, odds) do
     cond do
-      side == outcome ->
+      :draw == battle.outcome ->
+        wallet_id = Wallets.get_wallet_id(user.id)
+        {:ok, _wallet} = Wallets.fund(wallet_id, amount)
+
+        Logger.info(fn ->
+          "Refunded a bet against a drawed battle: {#{user.id}, #{side}, #{amount}}, battle: #{
+            battle.id
+          }"
+        end)
+
+      side == battle.outcome ->
         winnings = calculate_expected_winnings(odds, side, amount)
         wallet_id = Wallets.get_wallet_id(user.id)
 
-        Logger.info(fn ->
-          "Paid out a winning bet: {#{user.id}, #{side}, #{amount}}, winnings: #{winnings}"
-        end)
-
         {:ok, _wallet} = Wallets.fund(wallet_id, winnings)
+
+        Logger.info(fn ->
+          "Paid out a winning bet: {#{user.id}, #{side}, #{amount}}, winnings: #{winnings}, battle: #{
+            battle.id
+          }"
+        end)
 
       :else ->
         Logger.info(fn ->
-          "Closed out a losing bet: {#{user.id}, #{side}, #{amount}}"
+          "Closed out a losing bet: {#{user.id}, #{side}, #{amount}}, battle: #{battle.id}"
         end)
 
         :ok
