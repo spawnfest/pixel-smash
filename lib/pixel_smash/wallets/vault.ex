@@ -1,10 +1,46 @@
 defmodule PixelSmash.Wallets.Vault do
+  @moduledoc """
+  GenServer module to keep Wallets.
+
+  ## Examples
+
+      iex> alias PixelSmash.Wallets.{Vault, Wallet}
+      iex>
+      ...> pid = start_supervised!({Vault, [restore_fn: fn -> [Wallet.new("user_1", "250.00")] end, name: :test_vault]})
+      ...> [%Wallet{deposit: deposit, id: _, user_id: "user_1"}] = Vault.list_wallets(pid)
+      ...> Decimal.eq?("250.0", deposit)
+      iex>
+      ...> Vault.put_wallet(pid, Wallet.new("+0", "user_0", 100))
+      ...> [%Wallet{id: "+0", user_id: "user_0"}, %Wallet{id: _, user_id: "user_1"}] = Vault.list_wallets(pid)
+      iex>
+      ...> %Wallet{user_id: "user_1", deposit: deposit} = Vault.get_wallet_by_user(pid, "user_1")
+      ...> Decimal.eq?("250.0", deposit)
+      iex>
+      ...> %Wallet{deposit: deposit} = Vault.get_wallet(pid, "+0")
+      ...> Decimal.eq?(100, deposit)
+      iex>
+      ...> {:ok, %Wallet{id: "+0", deposit: deposit}} = Vault.update_wallet(pid, "+0", fn wallet -> %{wallet | deposit: Decimal.add(wallet.deposit, 50)} end)
+      ...> %Wallet{deposit: ^deposit} = Vault.get_wallet(pid, "+0")
+      ...> Decimal.eq?(150, deposit)
+      iex>
+      iex> # If anonymous function passed to update_wallet returns something other then
+      ...> # a wallet then the original wallet stays the same and result of anonymous function
+      ...> # is bypassed to caller.
+      ...>
+      ...> {:error, :reason} = Vault.update_wallet(pid, "+0", fn _wallet -> {:error, :reason} end)
+      ...> %Wallet{deposit: deposit} = Vault.get_wallet(pid, "+0")
+      ...> Decimal.eq?(150, deposit)
+  """
+
   use GenServer
 
   alias PixelSmash.Wallets.Wallet
 
-  def start_link(seed_fn) when is_function(seed_fn) do
-    GenServer.start_link(__MODULE__, seed_fn, name: __MODULE__)
+  def start_link(opts) do
+    restore_fn = Keyword.fetch!(opts, :restore_fn)
+    name = Keyword.get(opts, :name, __MODULE__)
+
+    GenServer.start_link(__MODULE__, restore_fn, name: name)
   end
 
   def list_wallets(pid \\ __MODULE__) do
@@ -27,12 +63,12 @@ defmodule PixelSmash.Wallets.Vault do
     GenServer.call(pid, {:update_wallet, id, update_fn})
   end
 
-  def init(seed_fn) do
-    {:ok, %{}, {:continue, {:seed, seed_fn}}}
+  def init(restore_fn) do
+    {:ok, %{}, {:continue, {:seed, restore_fn}}}
   end
 
-  def handle_continue({:seed, seed_fn}, vault) do
-    wallets = seed_fn.() ++ []
+  def handle_continue({:seed, restore_fn}, vault) do
+    wallets = restore_fn.() ++ []
     vault = Enum.reduce(wallets, vault, &do_put_wallet(&1, &2))
     {:noreply, vault}
   end
@@ -40,7 +76,7 @@ defmodule PixelSmash.Wallets.Vault do
   def handle_call(:list_wallets, _from, vault) do
     list =
       vault
-      |> Enum.sort(fn {id1, _wallet}, {id2, _wallet} -> id1 <= id2 end)
+      |> Enum.sort(fn {id1, _wallet1}, {id2, _wallet2} -> id1 <= id2 end)
       |> Enum.map(fn {_id, wallet} -> wallet end)
 
     {:reply, list, vault}
@@ -66,9 +102,9 @@ defmodule PixelSmash.Wallets.Vault do
   def handle_call({:update_wallet, id, update_fn}, _from, vault) do
     with %Wallet{id: old_id} = wallet when not is_nil(wallet) <- vault[id],
          %Wallet{id: ^old_id} = updated_wallet <- update_fn.(wallet) do
-      {:reply, updated_wallet, do_put_wallet(vault, updated_wallet)}
+      {:reply, {:ok, updated_wallet}, do_put_wallet(updated_wallet, vault)}
     else
-      nil -> {:reply, nil, vault}
+      reply -> {:reply, reply, vault}
     end
   end
 
