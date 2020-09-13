@@ -40,16 +40,6 @@ defmodule PixelSmash.Wallets do
     deposit
   end
 
-  def get_balance_string(wallet_id) do
-    wallet_id
-    |> get_balance()
-    |> Decimal.mult(100)
-    |> Decimal.round()
-    |> Decimal.to_integer()
-    |> Money.new()
-    |> Money.to_string()
-  end
-
   def take_stake(wallet_id, amount) do
     Vault.update_wallet(wallet_id, fn %Wallet{deposit: deposit} = wallet ->
       updated_deposit = Decimal.sub(deposit, amount)
