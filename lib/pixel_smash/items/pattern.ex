@@ -1,8 +1,8 @@
 defmodule PixelSmash.Items.Pattern do
-  defstruct [:data, :x, :y]
+  alias PixelSmash.Items.Item
 
   def helmet() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
@@ -10,12 +10,13 @@ defmodule PixelSmash.Items.Pattern do
         ["X", "X", "X", "X", "?"],
         ["X", "X", " ", " ", " "],
         ["X", "?", " ", " ", " "]
-      ]
+      ],
+      type: :helmet
     }
   end
 
   def crown() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
@@ -23,12 +24,13 @@ defmodule PixelSmash.Items.Pattern do
         ["X", "0", "X", "0", "X"],
         ["X", "?", "X", "?", "X"],
         ["X", "X", "X", "X", "X"]
-      ]
+      ],
+      type: :crown
     }
   end
 
   def hat() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
@@ -36,25 +38,56 @@ defmodule PixelSmash.Items.Pattern do
         ["?", "0", "0", "X", "X"],
         ["?", "X", "X", "X", "X"],
         ["X", "X", "X", "X", "X"]
-      ]
+      ],
+      type: :hat
+    }
+  end
+
+  def eyepatch() do
+    %Item{
+      x: 5,
+      y: 4,
+      data: [
+        ["X", "X", "X", "X", " "],
+        [" ", "X", "X", "X", " "],
+        [" ", "X", "X", "X", " "],
+        [" ", "X", "X", "X", " "]
+      ],
+      type: :eyepatch
+    }
+  end
+
+  def scouter() do
+    %Item{
+      x: 5,
+      y: 5,
+      data: [
+        ["X", "X", "X", "X", "X"],
+        ["X", "X", "0", "0", "X"],
+        ["X", "X", "0", "0", "X"],
+        [" ", "X", "0", "0", "X"],
+        [" ", "X", "X", "X", "X"]
+      ],
+      type: :scouter
     }
   end
 
   def googles() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
-        [" ", "?", "X", "?", " "],
-        ["X", "X", "0", "X", "X"],
-        ["X", "X", "0", "X", "X"],
-        [" ", "?", "X", "?", " "]
-      ]
+        [" ", "?", "X", "X", "?"],
+        ["X", "X", "0", "0", "X"],
+        ["X", "X", "0", "0", "X"],
+        [" ", "?", "X", "X", "?"]
+      ],
+      type: :googles
     }
   end
 
   def unilens() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
@@ -62,35 +95,38 @@ defmodule PixelSmash.Items.Pattern do
         ["X", " ", " ", "?", " "],
         ["X", " ", " ", "?", " "],
         ["0", "X", "X", "X", "X"]
-      ]
+      ],
+      type: :unilens
     }
   end
 
   def stick() do
-    %__MODULE__{
+    %Item{
       x: 5,
-      y: 4,
+      y: 6,
       data: [
-        [" ", "?", " "],
-        [" ", "X", " "],
-        [" ", "X", " "],
-        ["?", "X", "?"],
-        ["?", "X", "?"],
-        [" ", "X", " "]
-      ]
+        [" ", "?", " ", " ", " "],
+        [" ", "X", " ", " ", " "],
+        [" ", "X", " ", " ", " "],
+        ["?", "X", "?", " ", " "],
+        ["?", "X", "?", " ", " "],
+        [" ", "X", " ", " ", " "]
+      ],
+      type: :stick
     }
   end
 
   def glove() do
-    %__MODULE__{
+    %Item{
       x: 5,
       y: 4,
       data: [
-        ["?", "X", "X", "?"],
-        ["X", "X", "X", "X"],
-        ["X", "X", "X", "X"],
-        ["?", "X", "X", "?"]
-      ]
+        ["?", "X", "?", " ", " "],
+        ["X", "X", "X", " ", " "],
+        ["X", "X", "X", " ", " "],
+        ["?", "X", "?", " ", " "]
+      ],
+      type: :glove
     }
   end
 end
