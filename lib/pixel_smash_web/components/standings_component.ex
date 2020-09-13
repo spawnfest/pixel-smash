@@ -1,4 +1,4 @@
-defmodule PixelSmashWeb.StandingsComponentLive do
+defmodule PixelSmashWeb.StandingsComponent do
   @moduledoc """
   Live Component for displaying the current standings
   Updates whenever a battle is completed with the current
@@ -33,10 +33,5 @@ defmodule PixelSmashWeb.StandingsComponentLive do
   @impl true
   def mount(socket) do
     {:ok, socket}
-  end
-
-  @impl true
-  def update(%{gladiators: gladiators}, socket) do
-    {:ok, assign(socket, gladiators: gladiators)}
   end
 end

@@ -1,9 +1,16 @@
 defmodule PixelSmashWeb.PageLive do
   use PixelSmashWeb, :live_view
 
-  alias PixelSmash.{Battles, Gladiators}
-  alias PixelSmashWeb.BattleComponentLive, as: BattleComponent
-  alias PixelSmashWeb.StandingsComponentLive, as: StandingsComponent
+  alias PixelSmash.{
+    Battles,
+    Gladiators
+  }
+
+  alias PixelSmashWeb.{
+    BattleComponent,
+    ScheduledBattleComponent,
+    StandingsComponent
+  }
 
   @tick_rate :timer.seconds(2)
 

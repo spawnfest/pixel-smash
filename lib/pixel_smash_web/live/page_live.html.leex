@@ -4,9 +4,9 @@
   <% end %>
 </div>
 
-<div class="flex flex-wrap mb-4">
+<div class="flex flex-grow flex-wrap mb-4 justify-evenly">
   <%= for battle <- @upcoming_battles do %>
-    <%= live_component @socket, BattleComponent, battle: battle %>
+    <%= live_component @socket, ScheduledBattleComponent, battle: battle %>
   <% end %>
 </div>
 
