@@ -1,6 +1,8 @@
 defmodule PixelSmash.Battles.Supervisor do
   use Supervisor
 
+  alias PixelSmash.Battles
+
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, name: __MODULE__)
   end
@@ -8,9 +10,10 @@ defmodule PixelSmash.Battles.Supervisor do
   @impl true
   def init(_init_arg) do
     children = [
-      {DynamicSupervisor, strategy: :one_for_one, name: PixelSmash.Battles.DynamicSupervisor}
+      Battles.Matchmaking,
+      Battles.BattleSupervisor
     ]
 
-    Supervisor.start_link(children, strategy: :one_for_one)
+    Supervisor.start_link(children, strategy: :rest_for_one)
   end
 end

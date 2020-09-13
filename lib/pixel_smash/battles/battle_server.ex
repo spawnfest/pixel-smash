@@ -1,11 +1,11 @@
-defmodule PixelSmash.Battles.Server do
-  use GenServer
+defmodule PixelSmash.Battles.BattleServer do
+  use GenServer, restart: :temporary
 
   alias PixelSmash.Battles
   alias PixelSmash.Battles.Fighter
   alias PixelSmash.Battles.Battle
 
-  @seconds_per_tick 5
+  @seconds_per_tick 2
 
   def start_link({%Fighter{}, %Fighter{}} = init_arg) do
     GenServer.start_link(__MODULE__, init_arg)
@@ -52,14 +52,15 @@ defmodule PixelSmash.Battles.Server do
 
   @impl GenServer
   def handle_info(:tick, %Battles.Battle.InProgress{} = battle) do
-    schedule_next_tick()
+    case Battle.simulate_tick(battle) do
+      %Battles.Battle.InProgress{} = battle ->
+        schedule_next_tick()
 
-    {:noreply, Battle.simulate_tick(battle)}
-  end
+        {:noreply, battle}
 
-  @impl GenServer
-  def handle_info(:tick, %Battles.Battle.Finished{} = battle) do
-    {:noreply, battle}
+      %Battles.Battle.Finished{} = battle ->
+        {:stop, {:shutdown, battle}, battle}
+    end
   end
 
   defp schedule_next_tick() do

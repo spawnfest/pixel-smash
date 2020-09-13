@@ -3,8 +3,6 @@ defmodule PixelSmash.Application do
 
   use Application
 
-  alias PixelSmash.Battles
-
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
@@ -22,10 +20,6 @@ defmodule PixelSmash.Application do
 
     opts = [strategy: :one_for_one, name: PixelSmash.Supervisor]
     Supervisor.start_link(children, opts)
-  end
-
-  def start_phase(:schedule_series, :normal, _args) do
-    Battles.schedule_series()
   end
 
   def config_change(changed, _new, removed) do

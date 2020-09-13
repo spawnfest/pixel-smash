@@ -23,14 +23,6 @@
             </h2>
           </div>
 
-          <div class="px-5 mt-3">
-            <button class="bg-blue-600 hover:bg-blue-300 py-2 px-4 rounded shadow-lg capitalize"
-              phx-click="start_battle"
-              phx-value-id="<%= @battle.id%>">
-              Start Battle!
-            </button>
-          </div>
-
       <% %Battles.Battle.InProgress{} -> %>
         <% {left, right} = @battle.fighters %>
         <div class="flex">

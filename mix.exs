@@ -22,8 +22,7 @@ defmodule PixelSmash.MixProject do
   def application do
     [
       mod: {PixelSmash.Application, []},
-      extra_applications: [:logger, :runtime_tools],
-      start_phases: [schedule_series: []]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
