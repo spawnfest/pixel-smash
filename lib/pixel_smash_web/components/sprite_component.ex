@@ -1,4 +1,7 @@
 defmodule PixelSmashWeb.SpriteComponent do
+  @moduledoc """
+  Handles the display of the sprites representing the gladiators
+  """
   use PixelSmashWeb, :live_component
 
   def render(assigns) do

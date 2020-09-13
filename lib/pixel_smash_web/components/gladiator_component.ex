@@ -1,4 +1,8 @@
 defmodule PixelSmashWeb.GladiatorComponent do
+  @moduledoc """
+  Responsible for the common html for the various battle components.
+  Takes in the gladiator struct, and the text to display for the gladiator
+  """
   use PixelSmashWeb, :live_component
 
   def render(assigns) do

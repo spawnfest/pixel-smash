@@ -1,4 +1,9 @@
 defmodule PixelSmashWeb.ScheduledBattleComponent do
+  @moduledoc """
+  Handles the display of the upcoming battles.
+  Responsible for calculating the betting odds for each gladiator
+  and displays the potential financial reward for placing a bet on the gladiator.
+  """
   use PixelSmashWeb, :live_component
 
   alias PixelSmash.{
@@ -31,6 +36,9 @@ defmodule PixelSmashWeb.ScheduledBattleComponent do
     {:ok, socket}
   end
 
+  @doc """
+  Converts the odds to a percentage value to display to the user
+  """
   def as_percentage(%Decimal{} = n) do
     n
     |> Decimal.mult(100)
@@ -38,6 +46,9 @@ defmodule PixelSmashWeb.ScheduledBattleComponent do
     |> Number.Percentage.number_to_percentage(precision: 0)
   end
 
+  @doc """
+  Calculates the potential winnings to be received if the gladiator being bet on is the winner
+  """
   def example_winnings(battle, side) do
     {:ok, winnings} = Betting.get_expected_winnings(battle, side, 100)
 
@@ -47,6 +58,9 @@ defmodule PixelSmashWeb.ScheduledBattleComponent do
     "#{bet} ⇒ #{winnings}"
   end
 
+  @doc """
+  Handles the logic for if a player has placed a bet on a particular gladiator
+  """
   def bet?({_user, side, _amount}, side), do: true
   def bet?(_, _), do: false
 

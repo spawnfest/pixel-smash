@@ -1,4 +1,8 @@
 defmodule PixelSmashWeb.FinishedBattleComponent do
+  @moduledoc"""
+  Handles the logic behind displaying the finished battles.
+  Contains two fighters the loser (:right) and the winner (:left)
+  """
   use PixelSmashWeb, :live_component
 
   @impl true
