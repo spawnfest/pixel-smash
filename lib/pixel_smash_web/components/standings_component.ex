@@ -12,7 +12,7 @@ defmodule PixelSmashWeb.StandingsComponent do
       <table class="bg-gray-900 rounded-lg table-auto mx-auto mb-4 text-gray-100">
         <tr>
           <th class="px-4 py-2">Name</th>
-          <th class="px-4 py-2">ELO</th>
+          <th class="px-4 py-2" phx-click="resort_standings">ELO</th>
           <th class="px-4 py-2">Wins</th>
           <th class="px-4 py-2">Losses</th>
           <th class="px-4 py-2">Draws</th>
