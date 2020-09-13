@@ -5,6 +5,8 @@ defmodule PixelSmash.Sprites do
     Spritifier
   }
 
+  defdelegate stats(sprite), to: Sprite
+
   def equip(entity_a, entity_b) do
     entity_a = Spritifier.to_sprite(entity_a)
     entity_b = Spritifier.to_sprite(entity_b)

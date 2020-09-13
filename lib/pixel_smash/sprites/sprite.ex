@@ -62,4 +62,10 @@ defmodule PixelSmash.Sprites.Sprite do
 
     {xa + xb, ya + yb}
   end
+
+  def stats(%__MODULE__{map: map}) do
+    map
+    |> Map.values()
+    |> Enum.frequencies()
+  end
 end
