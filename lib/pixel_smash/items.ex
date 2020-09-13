@@ -8,10 +8,11 @@ defmodule PixelSmash.Items do
       &Pattern.crown/0,
       &Pattern.hat/0,
       &Pattern.scouter/0,
-      &Pattern.eyepatch/0,
+      # &Pattern.eyepatch/0,
       &Pattern.googles/0,
       &Pattern.unilens/0,
       &Pattern.stick/0,
+      &Pattern.sword/0,
       &Pattern.glove/0
     ]
     |> Enum.random()
@@ -103,10 +104,15 @@ defmodule PixelSmash.Items do
   end
 
   defp randomize_rule(rule) do
-    if rule == "?" do
-      Enum.random([" ", "X"])
-    else
-      rule
+    case rule do
+      "t" ->
+        Enum.random([" ", "X"])
+
+      "z" ->
+        Enum.random(["0", "X"])
+
+      _ ->
+        rule
     end
   end
 

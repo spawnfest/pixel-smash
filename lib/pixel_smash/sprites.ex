@@ -9,7 +9,15 @@ defmodule PixelSmash.Sprites do
     entity_a = Spritifier.to_sprite(entity_a)
     entity_b = Spritifier.to_sprite(entity_b)
 
-    Sprite.apply_mask(entity_a, entity_b)
+    Sprite.apply_mask(entity_a, entity_b, fn _key, v1, v2 ->
+      case v2 do
+        :transparent ->
+          v1
+
+        _ ->
+          v2
+      end
+    end)
   end
 
   def position(entity, at \\ {0, 0}) do
