@@ -15,6 +15,7 @@ defmodule PixelSmashWeb.PageLive do
   alias PixelSmashWeb.{
     FinishedBattleComponent,
     InProgressBattleComponent,
+    MenuComponent,
     ScheduledBattleComponent
   }
 

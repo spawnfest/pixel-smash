@@ -5,6 +5,8 @@ defmodule PixelSmashWeb.TheStoreLive do
 
   use PixelSmashWeb, :live_view
 
+  alias PixelSmashWeb.MenuComponent
+
   @impl true
   def mount(params, session, socket) do
     socket =
@@ -18,6 +20,8 @@ defmodule PixelSmashWeb.TheStoreLive do
   @impl true
   def render(assigns) do
     ~L"""
+    <%= live_component @socket, MenuComponent, balance: @balance %>
+
     <%= if not Enum.empty?(@the_store) do %>
     <h2 class="text-center text-white text-2xl">The Store</h2>
       <div class="grid grid-flow-col grid-cols-3 grid-rows-2">

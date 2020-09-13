@@ -2,6 +2,7 @@ defmodule PixelSmashWeb.GladiatorLive do
   use PixelSmashWeb, :live_view
 
   alias PixelSmash.Gladiators
+  alias PixelSmashWeb.MenuComponent
 
   def mount(%{"id" => id} = params, session, socket) do
     socket =
@@ -24,12 +25,16 @@ defmodule PixelSmashWeb.GladiatorLive do
 
   def render(%{gladiator: gladiator} = assigns) do
     ~L"""
+      <%= live_component @socket, MenuComponent, balance: @balance %>
+
       <%= live_component @socket, PixelSmashWeb.GladiatorCardComponent, gladiator: gladiator %>
     """
   end
 
   def render(%{gladiators: gladiators} = assigns) do
     ~L"""
+      <%= live_component @socket, MenuComponent, balance: @balance %>
+
       <%= for gladiator <- gladiators do %>
         <%= live_component @socket, PixelSmashWeb.GladiatorCardComponent, gladiator: gladiator %>
       <% end %>

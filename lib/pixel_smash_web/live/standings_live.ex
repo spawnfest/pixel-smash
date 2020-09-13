@@ -10,7 +10,9 @@ defmodule PixelSmashWeb.StandingsLive do
   use PixelSmashWeb, :live_view
 
   alias PixelSmash.Gladiators
-  alias PixelSmashWeb.StandingsComponent
+  alias PixelSmashWeb.{
+    MenuComponent,
+    StandingsComponent}
 
   @tick_rate :timer.seconds(5)
 
@@ -30,6 +32,8 @@ defmodule PixelSmashWeb.StandingsLive do
   @impl true
   def render(assigns) do
     ~L"""
+      <%= live_component @socket, MenuComponent, balance: @balance %>
+
       <%= live_component @socket, StandingsComponent, gladiators: @gladiators %>
     """
   end
