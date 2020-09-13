@@ -21,6 +21,9 @@
               <img src="<%= Routes.static_path(@conn, "/images/logo.png") %>" alt="Pixel Smash Logo"/>
             </a>
           </div>
+          <nav role="navigation" class="text-white">
+            <%= render "_user_menu.html", assigns %>
+          </nav>
         </h1>
       </section>
     </header>

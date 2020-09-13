@@ -1,37 +1,36 @@
-<h1>Log in</h1>
+<div class="flex flex-wrap justify-center items-stretch mx-auto">
+  <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "flex flex-col bg-gray-900 rounded-lg max-w-1/4 m-4"], fn f -> %>
+    <div class="flex items-start">
+      <span class="bg-green-600 text-white p-2 leading-none flex items-center">
+        Log In
+      </span>
+    </div>
 
-<div class="w-full max-w-xs">
-  <%= form_for @conn, Routes.user_session_path(@conn, :create),
-    [as: :user],
-      fn f -> %>
-    <%= if @error_message do %>
-      <div class="alert alert-danger">
-        <p><%= @error_message %></p>
+    <div class="flex flex-col items-center text-white px-4 py-6">
+      <%= if @error_message do %>
+        <p class="mb-4"><%= @error_message %>%></p>
+      <% end %>
+
+      <div class="mb-4">
+        <%= label f, :email, class: "block font-bold pr-4" %>
+        <%= email_input f, :email, required: true, class: "bg-gray-100 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 mr-4" %>
+        <%= error_tag f, :email %>
       </div>
-    <% end %>
 
-    <div class="mb-4">
-      <%= label f, :email, class: "block text-gray-500 text-sm font-bold mb-2"%>
-      <%= email_input f, :email, required: true %>
+      <div class="mb-4">
+        <%= label f, :password, class: "block font-bold pr-4" %>
+        <%= password_input f, :password, required: true, class: "bg-gray-100 appearance-none border-2 border-gray-200 rounded py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500 mr-4" %>
+        <%= error_tag f, :password %>
+      </div>
+
+      <div class="mb-4">
+        <%= label f, :remember_me, "Remember me", class: "inline font-bold pr-4" %>
+        <%= checkbox f, :remember_me, class: "align-middle" %>
+      </div>
     </div>
 
-    <div class="mb-4">
-      <%= label f, :password %>
-      <%= password_input f, :password, required: true %>
-    </div>
-
-    <div class="mb-4">
-      <%= label f, :remember_me, "Keep me logged in for 60 days" %>
-      <%= checkbox f, :remember_me %>
-    </div>
-
-    <div>
-      <%= submit "Log in" %>
+    <div class="mt-auto flex items-center justify-end">
+      <%= submit "Log in", class: "shadow bg-purple-600 hover:bg-purple-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" %>
     </div>
   <% end %>
 </div>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>

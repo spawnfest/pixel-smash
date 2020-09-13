@@ -11,7 +11,7 @@ defmodule PixelSmashWeb.ErrorHelpers do
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: "invalid-feedback block",
         phx_feedback_for: input_id(form, field)
       )
     end)
