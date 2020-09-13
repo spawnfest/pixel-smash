@@ -62,7 +62,8 @@ defmodule PixelSmash.MixProject do
       {:faker, "~> 0.15"},
       {:norm, "~> 0.12.0"},
       {:decimal, "~> 1.9"},
-      {:money, "~> 1.7"}
+      {:money, "~> 1.7"},
+      {:number, "~> 1.0.1"}
     ]
   end
 

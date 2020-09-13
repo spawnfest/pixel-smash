@@ -5,7 +5,18 @@
     </span>
   </div>
   <div class="flex flex-col items-start px-4 py-6 space-y-4">
-    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @left, text: "Wins: #{@left.wins} Draws: #{@left.draws} Losses: #{@left.losses}  ELO: #{@left.elo}" %>
-    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @right, text: "Wins: #{@right.wins} Draws: #{@left.draws} Losses: #{@right.losses}  ELO: #{@right.elo}" %>
+    <div class="flex items-start items-center space-x-6">
+      <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @left, text: "Wins: #{@left.wins} Draws: #{@left.draws} Losses: #{@left.losses}  ELO: #{@left.elo}" %>
+      <h2 class="text-lg font-semibold text-white -mt-1">
+        <%= as_percentage(@left_odds) %>
+      </h2>
+    </div>
+
+    <div class="flex items-start items-center space-x-6">
+      <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @right, text: "Wins: #{@right.wins} Draws: #{@left.draws} Losses: #{@right.losses}  ELO: #{@right.elo}" %>
+      <h2 class="text-lg font-semibold text-white -mt-1">
+        <%= as_percentage(@right_odds) %>
+      </h2>
+    </div>
   </div>
 </div>
