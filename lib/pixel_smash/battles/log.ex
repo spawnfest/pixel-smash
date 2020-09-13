@@ -40,7 +40,7 @@ defmodule PixelSmash.Battles.Log do
   defp attack_narration(2, action) do
     [
     action.fighter.name,
-    " attacks and makes ",
+    " attacks and does ",
     Integer.to_string(action.damage),
     " damage to ",
     action.target.name,
@@ -77,7 +77,7 @@ defmodule PixelSmash.Battles.Log do
       action.fighter.name,
       " calls the force of ",
       action.spell_name,
-      " and makes ",
+      " and does ",
       Integer.to_string(action.damage),
       " damage to ",
       action.target.name,
