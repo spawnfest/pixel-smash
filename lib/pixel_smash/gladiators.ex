@@ -9,6 +9,8 @@ defmodule PixelSmash.Gladiators do
     Supervisor
   }
 
+  alias PixelSmash.Sprites
+
   @store Store
 
   defdelegate child_spec(init_arg), to: Supervisor
@@ -38,8 +40,8 @@ defmodule PixelSmash.Gladiators do
     Store.register_battle_result(store, matchup, winner)
   end
 
-  def generate() do
-    PixelSmash.Gladiators.Gladiator.generate()
+  def generate_gladiator() do
+    Gladiator.generate()
   end
 
   def equip(%Gladiator{} = gladiator, %PixelSmash.Items.Item{} = item, slot) do

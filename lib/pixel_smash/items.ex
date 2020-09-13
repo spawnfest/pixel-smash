@@ -2,7 +2,7 @@ defmodule PixelSmash.Items do
   alias PixelSmash.Items.Item
   alias PixelSmash.Items.Pattern
 
-  def generate() do
+  def generate_item() do
     [
       &Pattern.helmet/0,
       &Pattern.crown/0,
