@@ -15,7 +15,21 @@ defmodule PixelSmash.Battles.Fighter do
     speed :: non_neg_integer()
     magic :: non_neg_integer()
     spells :: [String.t()]
+    all_actions_properties :: [map()]
+    remaining_actions_properties :: [map()]
   end
+
+  def next_action_properties(%Fighter{} = fighter) do
+    fighter = maybe_fill_remaining_actions(fighter)
+    %Fighter{remaining_actions_properties: [action | actions_tail]} = fighter
+    {action, %{fighter | remaining_actions_properties: actions_tail}}
+  end
+
+  defp maybe_fill_remaining_actions(%Fighter{remaining_actions_properties: []} = fighter) do
+    %{fighter | remaining_actions_properties: Enum.shuffle(fighter.all_actions_properties)}
+  end
+
+  defp maybe_fill_remaining_actions(%Fighter{} = fighter), do: fighter
 
   def rest(%Fighter{} = fighter) do
     %Fighter{fighter | exhaustion: max(0, fighter.exhaustion - fighter.speed)}

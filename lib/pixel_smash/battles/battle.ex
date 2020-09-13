@@ -3,6 +3,7 @@ defmodule PixelSmash.Battles.Battle do
 
   alias PixelSmash.Battles.{
     Action,
+    ActionPropertiesDeck,
     Battle,
     Fighter,
     Log
@@ -31,6 +32,9 @@ defmodule PixelSmash.Battles.Battle do
   end
 
   def schedule(%Fighter{} = left, %Fighter{} = right) do
+    left = %{left | all_actions_properties: ActionPropertiesDeck.actions_properties(left)}
+    right = %{right | all_actions_properties: ActionPropertiesDeck.actions_properties(right)}
+
     Battle.Scheduled.new(Ecto.UUID.generate(), {left, right})
   end
 
@@ -93,30 +97,33 @@ defmodule PixelSmash.Battles.Battle do
   end
 
   def take_turn(%Fighter{} = fighter, %Fighter{} = opponent) do
-    action = choose_action(fighter, opponent)
+    {action, fighter} = next_action(fighter, opponent)
     {fighter, opponent} = Action.apply(action, fighter, opponent)
     fighter = apply_exhaustion(fighter, action)
 
     {fighter, opponent, action}
   end
 
-  def choose_action(%Fighter{} = fighter, %Fighter{} = opponent) do
-    # Basically everything in here is a placeholder.
-    # I'm just experimenting with interfaces
-    case :rand.uniform() do
-      n when n < 0.3 ->
+  defp next_action(%Fighter{} = fighter, %Fighter{} = opponent) do
+    {properties, fighter} = Fighter.next_action_properties(fighter)
+    {action_from_properties(properties, fighter, opponent), fighter}
+  end
+
+  defp action_from_properties(properties, fighter, opponent) do
+    case properties.kind do
+      :cast ->
         %Action.Cast{
           fighter: fighter,
           target: opponent,
-          damage: fighter.magic,
-          spell_name: Enum.random(fighter.spells)
+          damage: properties.damage,
+          spell_name: properties.spell_name
         }
 
-      _ ->
+      :attack ->
         %Action.Attack{
           fighter: fighter,
           target: opponent,
-          damage: fighter.strength
+          damage: properties.damage
         }
     end
   end
