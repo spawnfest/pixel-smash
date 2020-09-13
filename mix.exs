@@ -60,7 +60,8 @@ defmodule PixelSmash.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:faker, "~> 0.15"},
-      {:norm, "~> 0.12.0"}
+      {:norm, "~> 0.12.0"},
+      {:decimal, "~> 1.9"}
     ]
   end
 
