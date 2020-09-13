@@ -13,6 +13,10 @@ defmodule PixelSmash.Battles do
     Matchmaking.list_upcoming_battles(matchmaking_server)
   end
 
+  def list_finished_battles(matchmaking_server \\ Matchmaking) do
+    Matchmaking.list_finished_battles(matchmaking_server)
+  end
+
   def list_current_battles(matchmaking_server \\ Matchmaking) do
     Matchmaking.list_current_battles(matchmaking_server)
   end

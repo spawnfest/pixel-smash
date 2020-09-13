@@ -4,7 +4,7 @@ defmodule PixelSmashWeb.SpriteComponent do
   def render(assigns) do
     ~L"""
     <svg
-      style="width: 64px; height: 64px;"
+      style="min-width: 64px; min-height: 64px;"
       viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>"
       xmlns="http://www.w3.org/2000/svg"
       shape-rendering="crispEdges">

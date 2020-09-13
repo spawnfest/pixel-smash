@@ -9,7 +9,7 @@ defmodule PixelSmashWeb.StandingsComponent do
   @impl true
   def render(assigns) do
     ~L"""
-      <table class="ml-4 table-auto">
+      <table class="bg-gray-900 rounded-lg table-auto mx-auto mb-4 text-gray-100">
         <tr>
           <th class="px-4 py-2">Name</th>
           <th class="px-4 py-2">ELO</th>

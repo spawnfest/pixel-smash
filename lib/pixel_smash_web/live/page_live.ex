@@ -7,7 +7,8 @@ defmodule PixelSmashWeb.PageLive do
   }
 
   alias PixelSmashWeb.{
-    BattleComponent,
+    FinishedBattleComponent,
+    InProgressBattleComponent,
     ScheduledBattleComponent,
     StandingsComponent
   }
@@ -20,6 +21,7 @@ defmodule PixelSmashWeb.PageLive do
       socket
       |> assign_defaults(params, session)
       |> assign(:upcoming_battles, Battles.list_upcoming_battles())
+      |> assign(:finished_battles, Battles.list_finished_battles())
       |> assign(:current_battles, Battles.list_current_battles())
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
 
@@ -35,6 +37,7 @@ defmodule PixelSmashWeb.PageLive do
     socket =
       socket
       |> assign(:upcoming_battles, Battles.list_upcoming_battles())
+      |> assign(:finished_battles, Battles.list_finished_battles())
       |> assign(:current_battles, Battles.list_current_battles())
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
 

@@ -1,13 +1,28 @@
-<div class="flex flex-wrap mb-4">
-  <%= for battle <- @current_battles do %>
-    <%= live_component @socket, BattleComponent, battle: battle %>
-  <% end %>
-</div>
+<%= if not Enum.empty?(@current_battles) do %>
+  <h2 class="text-center text-white text-2xl">In-Progress Battles</h2>
+  <div class="flex flex-grow flex-wrap mb-4 justify-evenly">
+    <%= for battle <- @current_battles do %>
+      <%= live_component @socket, InProgressBattleComponent, battle: battle %>
+    <% end %>
+  </div>
+<% end %>
 
-<div class="flex flex-grow flex-wrap mb-4 justify-evenly">
-  <%= for battle <- @upcoming_battles do %>
-    <%= live_component @socket, ScheduledBattleComponent, battle: battle %>
-  <% end %>
-</div>
+<%= if not Enum.empty?(@finished_battles) do %>
+  <h2 class="text-center text-white text-2xl">Finished Battles</h2>
+  <div class="flex flex-grow flex-wrap mb-4 justify-evenly">
+    <%= for battle <- @finished_battles do %>
+      <%= live_component @socket, FinishedBattleComponent, battle: battle %>
+    <% end %>
+  </div>
+<% end %>
+
+<%= if not Enum.empty?(@upcoming_battles) do %>
+  <h2 class="text-center text-white text-2xl">Upcoming Battles</h2>
+  <div class="flex flex-grow flex-wrap mb-4 justify-evenly">
+    <%= for battle <- @upcoming_battles do %>
+      <%= live_component @socket, ScheduledBattleComponent, battle: battle %>
+    <% end %>
+  </div>
+<% end %>
 
 <%= live_component @socket, StandingsComponent, gladiators: @gladiators %>

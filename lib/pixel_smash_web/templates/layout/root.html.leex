@@ -9,11 +9,11 @@
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="bg-white min-h-screen flex flex-col">
+  <body class="bg-black min-h-screen flex flex-col">
     <header>
       <section class="container flex flex-row items-center justify-center mx-auto">
         <h1 class="flex">
-          <div class="flex-auto text-center font-bold text-3xl px-4 py-12">
+          <div class="flex-auto text-center text-gray-100 font-bold text-3xl px-4 py-12">
             Welcome to PixelSmash Arena!
           </div>
           <div class="flex-auto px-4 py-3">
@@ -30,7 +30,7 @@
     </div>
 
     <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-      <p class="text-center mt-3 text-gray-900 bg-blue-600 rounded-lg">
+      <p class="text-center mt-3 text-gray-100 bg-gray-900">
         <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
       </p>
     <% end %>

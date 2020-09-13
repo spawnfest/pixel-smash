@@ -24,6 +24,10 @@ defmodule PixelSmash.Battles.Matchmaking do
     GenServer.call(server, :list_upcoming_battles)
   end
 
+  def list_finished_battles(server \\ __MODULE__) do
+    GenServer.call(server, :list_finished_battles)
+  end
+
   def list_current_battles(server \\ __MODULE__) do
     GenServer.call(server, :list_current_battles)
   end
@@ -53,13 +57,19 @@ defmodule PixelSmash.Battles.Matchmaking do
   end
 
   @impl GenServer
+  def handle_call(:list_finished_battles, _from, state) do
+    result = Enum.sort_by(state.finished_battles, & &1.id)
+
+    {:reply, result, state}
+  end
+
+  @impl GenServer
   def handle_call(:list_current_battles, _from, state) do
-    in_progress_battles =
+    result =
       Enum.map(state.current_series, fn {_ref, {pid, _combatants}} ->
         BattleServer.get_battle(pid)
       end)
-
-    result = Enum.sort_by(in_progress_battles ++ state.finished_battles, & &1.id)
+      |> Enum.sort_by(& &1.id)
 
     {:reply, result, state}
   end
