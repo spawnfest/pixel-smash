@@ -48,4 +48,23 @@ defmodule PixelSmash.Battles.Action do
       ^opponent -> {fighter, result}
     end
   end
+
+  def from_properties(properties, fighter, opponent) when is_map(properties) do
+    case properties.kind do
+      :cast ->
+        %Action.Cast{
+          fighter: fighter,
+          target: opponent,
+          damage: properties.damage,
+          spell_name: properties.spell_name
+        }
+
+      :attack ->
+        %Action.Attack{
+          fighter: fighter,
+          target: opponent,
+          damage: properties.damage
+        }
+    end
+  end
 end

@@ -3,15 +3,15 @@ defmodule PixelSmash.Battles.ActionPropertiesDeck do
 
   # counts of colors should be >= 0
   @colors_attack_multiplier [
-    {%{red: 12, pink: 5}, 3},
-    {%{dark_red: 7, dark_green: 3}, 2},
-    {%{red: 3}, 1}
+    {%{red: 12, pink: 5}, 2.0},
+    {%{dark_red: 7, dark_green: 3}, 1.5},
+    {%{red: 3}, 1.0}
   ]
 
   @colors_cast_multiplier [
-    {%{purple: 12, dark_pink: 5}, 7},
-    {%{dark_purple: 12, vitality: 5}, 2},
-    {%{purple: 12}, 1}
+    {%{purple: 12, dark_pink: 5}, 3.0},
+    {%{dark_purple: 12, vitality: 5}, 1.5},
+    {%{purple: 12}, 1.0}
   ]
 
   @doc """
@@ -65,14 +65,14 @@ defmodule PixelSmash.Battles.ActionPropertiesDeck do
   defp attack_action_properties(fighter, multiplier) do
     %{
       kind: :attack,
-      damage: fighter.strength * multiplier
+      damage: round(fighter.strength * multiplier)
     }
   end
 
   defp cast_action_properties(fighter, multiplier) do
     %{
       kind: :cast,
-      damage: fighter.magic * multiplier,
+      damage: round(fighter.magic * multiplier),
       spell_name: Enum.random(fighter.spells)
     }
   end
