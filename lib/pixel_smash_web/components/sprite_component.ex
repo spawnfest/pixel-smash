@@ -23,19 +23,31 @@ defmodule PixelSmashWeb.SpriteComponent do
   end
 
   defp fill_color(base_color) do
-    {h, s, l} = hsl(base_color)
-    "hsla(#{h}, #{s}%, #{l}%)"
+    case hsl(base_color) do
+      nil ->
+        "none"
+
+      {h, s, l} ->
+        "hsla(#{h}, #{s}%, #{l}%)"
+    end
   end
 
   defp hsl(base_color) do
     case base_color do
+      :transparent -> nil
+      :gray -> {0, 0, 20}
       :green -> {76, 100, 71}
       :blue -> {216, 100, 69}
       :yellow -> {46, 100, 68}
       :red -> {1, 100, 70}
       :purple -> {262, 100, 70}
       :pink -> {349, 100, 70}
-      :gray -> {0, 0, 50}
+      :dark_green -> {155, 90, 40}
+      :dark_blue -> {216, 75, 49}
+      :dark_yellow -> {46, 75, 48}
+      :dark_red -> {1, 75, 50}
+      :dark_purple -> {262, 75, 50}
+      :dark_pink -> {349, 75, 50}
     end
   end
 end
