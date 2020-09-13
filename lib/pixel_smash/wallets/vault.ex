@@ -23,7 +23,7 @@ defmodule PixelSmash.Wallets.Vault do
       ...> %Wallet{deposit: ^deposit} = Vault.get_wallet(pid, "+0")
       ...> true = Decimal.eq?(150, deposit)
       iex>
-      ...> {:error, :notfound} = Vault.update_wallet(pid, "nonexisting_wallet_id", fn _wallet -> nil end)
+      ...> {:error, :not_found} = Vault.update_wallet(pid, "nonexisting_wallet_id", fn _wallet -> nil end)
       iex>
       iex> # If anonymous function passed to update_wallet returns something other then
       ...> # a wallet then the original wallet stays the same and result of anonymous function
@@ -106,7 +106,7 @@ defmodule PixelSmash.Wallets.Vault do
          %Wallet{id: ^old_id} = updated_wallet <- update_fn.(wallet) do
       {:reply, {:ok, updated_wallet}, do_put_wallet(updated_wallet, vault)}
     else
-      nil -> {:reply, {:error, :notfound}, vault}
+      nil -> {:reply, {:error, :not_found}, vault}
       reply -> {:reply, reply, vault}
     end
   end
