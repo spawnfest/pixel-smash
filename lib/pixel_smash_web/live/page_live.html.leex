@@ -1,7 +1,7 @@
 <div class="text-right">
   <%= link "Standings", to: Routes.standings_path(@socket, :index), class: "text-white mx-4 text-xl" %>
-  <%= link "Gladiators", to: Routes.gladiator_path(@socket, :index), class: "text-white text-xl" %>
-  <%= link "The Store", to: Routes.the_store_path(@socket, :index), class: "text-white text-xl" %>
+  <%= link "Gladiators", to: Routes.gladiator_path(@socket, :index), class: "text-white mx-4 text-xl" %>
+  <%= link "The Store", to: Routes.the_store_path(@socket, :index), class: "text-white mx-4 text-xl" %>
 </div>
 
 <%= if not Enum.empty?(@current_battles) do %>

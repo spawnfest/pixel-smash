@@ -7,7 +7,7 @@ defmodule PixelSmashWeb.GladiatorCardComponent do
   @impl true
   def render(assigns) do
     ~L"""
-      <table class="bg-gray-900 rounded-lg table-fixed mx-auto mb-4 text-gray-100">
+      <table class="bg-gray-900 rounded-lg table-auto mb-4 text-gray-100 w-full">
         <tr>
           <th class="px-4 py-2">Icon</th>
           <th class="px-4 py-2">Name</th>

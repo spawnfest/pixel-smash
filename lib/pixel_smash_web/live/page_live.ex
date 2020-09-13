@@ -35,8 +35,8 @@ defmodule PixelSmashWeb.PageLive do
     {:ok, socket}
   end
 
+  @impl true
   def handle_event("show_gladiator", %{"id" => id}, socket) do
-    IO.inspect("show gladiator #{id}")
     {:noreply, push_redirect(socket, to: "/gladiator/#{id}")}
   end
 
