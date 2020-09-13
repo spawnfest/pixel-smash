@@ -35,18 +35,22 @@ defmodule PixelSmashWeb.PageLive do
     {:ok, socket}
   end
 
-
   @impl true
   def handle_event("bet", %{"side" => side, "amount" => amount, "battle" => battle_id}, socket) do
-    side = case side do
-      "left" -> :left
-      "right" -> :right
-    end
+    side =
+      case side do
+        "left" -> :left
+        "right" -> :right
+      end
 
     battle = Battles.get_battle(battle_id)
-    :ok = Betting.place_bet(battle, {socket.assigns.current_user, side, String.to_integer(amount)})
 
-    send_update ScheduledBattleComponent, id: battle.id, battle: battle, current_user: socket.assigns.current_user
+    :ok =
+      Betting.place_bet(battle, {socket.assigns.current_user, side, String.to_integer(amount)})
+
+    socket =
+      socket
+      |> assign_balance()
 
     {:noreply, socket}
   end
@@ -62,6 +66,7 @@ defmodule PixelSmashWeb.PageLive do
 
     socket =
       socket
+      |> assign_balance()
       |> assign(:upcoming_battles, Battles.list_upcoming_battles())
       |> assign(:finished_battles, Battles.list_finished_battles())
       |> assign(:current_battles, Battles.list_current_battles())

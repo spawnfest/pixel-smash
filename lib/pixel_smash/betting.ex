@@ -25,6 +25,7 @@ defmodule PixelSmash.Betting do
 
   def get_bet(bookie \\ Betting.Bookie, battle, user)
   def get_bet(_bookie, _battle, nil), do: nil
+
   def get_bet(bookie, battle, %Accounts.User{} = user) do
     Betting.Bookie.get_bet(bookie, battle, user)
   end

@@ -38,7 +38,7 @@ defmodule PixelSmash.Wallets.Vault do
 
   alias PixelSmash.Wallets.Wallet
 
-  @initial_deposit 250
+  @initial_deposit 1000
 
   def start_link(opts) do
     restore_fn = Keyword.fetch!(opts, :restore_fn)

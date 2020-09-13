@@ -166,6 +166,7 @@ defmodule PixelSmash.Betting.Bookie do
     case Map.get(books, battle_id) do
       nil ->
         nil
+
       {_, bets} ->
         Enum.find(bets, fn {better, _, _} -> user.id == better.id end)
     end

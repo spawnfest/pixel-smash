@@ -27,7 +27,7 @@ defmodule PixelSmash.Wallets do
   defdelegate child_spec(init_arg), to: Supervisor
 
   def persisted_wallets do
-    [Wallet.new(1, "1000.00")]
+    []
   end
 
   def get_wallet_id(user_id) do
