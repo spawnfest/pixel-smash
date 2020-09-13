@@ -19,6 +19,11 @@ defmodule PixelSmash.Wallets do
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.deposit(wallet_id, 400)
       ...> 400.0 = Wallets.get_ballance(wallet_id)
+      iex>
+      ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", 300)
+      ...> "$300" = Wallets.get_ballance_string(wallet_id)
+      ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", "301.33333333")
+      ...> "$301,33" = Wallets.get_ballance_string(wallet_id)
   """
 
   alias PixelSmash.Wallets.{
@@ -47,6 +52,15 @@ defmodule PixelSmash.Wallets do
   def get_ballance(wallet_id) do
     %Wallet{deposit: deposit} = Vault.get_wallet(wallet_id)
     Decimal.to_float(deposit)
+  end
+
+  def get_ballance_string(wallet_id) do
+    wallet_id
+    |> get_ballance()
+    |> Kernel.*(100.0)
+    |> round()
+    |> Money.new()
+    |> Money.to_string()
   end
 
   def take_stake(wallet_id, amount) do
