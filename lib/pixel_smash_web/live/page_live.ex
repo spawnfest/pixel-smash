@@ -3,7 +3,8 @@ defmodule PixelSmashWeb.PageLive do
 
   alias PixelSmash.{
     Battles,
-    Gladiators
+    Gladiators,
+    TheStore
   }
 
   alias PixelSmashWeb.{
@@ -24,6 +25,7 @@ defmodule PixelSmashWeb.PageLive do
       |> assign(:finished_battles, Battles.list_finished_battles())
       |> assign(:current_battles, Battles.list_current_battles())
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
+      |> assign(:the_store, TheStore.on_sale())
       |> assign(:sort_order, :desc)
 
     send(self(), :tick)
@@ -37,6 +39,7 @@ defmodule PixelSmashWeb.PageLive do
       socket
       |> assign(:sort_order, :asc)
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo(:asc))
+
     {:noreply, socket}
   end
 
@@ -45,11 +48,12 @@ defmodule PixelSmashWeb.PageLive do
       socket
       |> assign(:sort_order, :desc)
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo(:desc))
-      {:noreply, socket}
+
+    {:noreply, socket}
   end
 
   @impl true
-  def handle_info(:tick, %{assigns: %{sort_order: sort_order}}= socket) do
+  def handle_info(:tick, %{assigns: %{sort_order: sort_order}} = socket) do
     schedule_next_tick()
 
     socket =

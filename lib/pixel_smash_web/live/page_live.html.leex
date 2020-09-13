@@ -26,3 +26,13 @@
 <% end %>
 
 <%= live_component @socket, StandingsComponent, gladiators: @gladiators %>
+
+<%= if not Enum.empty?(@the_store) do %>
+  <h2 class="text-center text-white text-2xl">The Store</h2>
+    <div class="grid grid-flow-col grid-cols-3 grid-rows-2">
+      <%= for item <- @the_store do %>
+        <%= live_component @socket, PixelSmashWeb.ItemComponent, item: item.item, sprite: item.sprite %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
