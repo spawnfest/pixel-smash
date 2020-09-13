@@ -68,7 +68,7 @@ defmodule PixelSmash.Sprites.Sprite do
   The sum here is considered boundless positive or negative values.
   """
   @spec position(sprite :: t(), at :: coor()) :: t()
-  def position(%__MODULE__{} = sprite, at \\ {0, 0}) do
+  def position(%__MODULE__{} = sprite, at) do
     map =
       Enum.map(sprite.map, fn {key, value} ->
         key = add_coordinate(key, at)
