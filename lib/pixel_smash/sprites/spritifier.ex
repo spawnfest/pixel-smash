@@ -41,22 +41,34 @@ defimpl PixelSmash.Sprites.Spritifier, for: PixelSmash.Items.Item do
       map: map
     }
 
-    cond do
-      item.type in [:helmet, :hat, :crown] ->
-        PixelSmash.Sprites.Sprite.position(sprite, {0, 0})
+    sprite =
+      cond do
+        item.type in [:helmet, :hat, :crown] ->
+          PixelSmash.Sprites.Sprite.position(sprite, {0, 0})
 
-      item.type in [:googles, :eyepatch, :scouter, :unilens] ->
-        PixelSmash.Sprites.Sprite.position(sprite, {0, 2})
+        item.type in [:googles, :eyepatch, :scouter, :unilens] ->
+          PixelSmash.Sprites.Sprite.position(sprite, {0, 2})
 
-      item.type in [:stick] ->
-        PixelSmash.Sprites.Sprite.position(sprite, {0, 4})
+        item.type in [:stick, :sword] ->
+          PixelSmash.Sprites.Sprite.position(sprite, {0, 4})
 
-      item.type in [:glove] ->
-        PixelSmash.Sprites.Sprite.position(sprite, {0, 5})
+        item.type in [:glove] ->
+          PixelSmash.Sprites.Sprite.position(sprite, {0, 5})
 
-      true ->
-        sprite
-    end
+        true ->
+          sprite
+      end
+
+    fill =
+      PixelSmash.Grids.generate(10, 10, fn _, _ -> :transparent end)
+      |> PixelSmash.Grids.to_sprite(10, 10)
+
+    filled_item = Map.merge(fill.map, sprite.map)
+
+    sprite
+    |> Map.put(:map, filled_item)
+    |> Map.put(:x, 10)
+    |> Map.put(:y, 10)
   end
 end
 

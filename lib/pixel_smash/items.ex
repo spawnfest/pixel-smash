@@ -36,7 +36,7 @@ defmodule PixelSmash.Items do
         item.type in [:crown, :eyepatch, :scouter] ->
           Map.put(item, :attribute, PixelSmash.Attributes.special())
 
-        item.type in [:unilens, :stick, :glove] ->
+        item.type in [:unilens, :stick, :sword, :glove] ->
           Map.put(item, :attribute, PixelSmash.Attributes.combat())
 
         true ->
@@ -44,7 +44,7 @@ defmodule PixelSmash.Items do
       end
 
     # Generate name
-    name(item)
+    item = name(item)
 
     # We create an array of coordinates
     coordinates =
@@ -122,7 +122,7 @@ defmodule PixelSmash.Items do
       item.type in [:helmet, :crown, :hat, :googles, :unilens] ->
         mirror(item)
 
-      item.type in [:stick, :glove] ->
+      item.type in [:stick, :sword, :glove] ->
         mirror?(item)
 
       true ->

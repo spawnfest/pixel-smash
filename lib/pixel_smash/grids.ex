@@ -35,6 +35,14 @@ defmodule PixelSmash.Grids do
     Enum.zip(coordinates, elements) |> Enum.into(%{})
   end
 
+  def to_sprite(data, size_x, size_y) do
+    %PixelSmash.Sprites.Sprite{
+      x: size_x,
+      y: size_y,
+      map: to_map(data, size_x, size_y)
+    }
+  end
+
   def mirror(data) do
     Enum.map(data, fn row ->
       reverse = Enum.reverse(row)

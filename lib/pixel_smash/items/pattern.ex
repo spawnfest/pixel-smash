@@ -126,7 +126,7 @@ defmodule PixelSmash.Items.Pattern do
         ["X", "X", "X", " ", " "],
         [" ", "X", " ", " ", " "]
       ],
-      type: :stick
+      type: :sword
     }
   end
 

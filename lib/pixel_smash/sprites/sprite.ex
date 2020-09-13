@@ -49,6 +49,7 @@ defmodule PixelSmash.Sprites.Sprite do
         key = add_coordinate(key, at)
         {key, value}
       end)
+      |> Enum.into(%{})
 
     Map.put(sprite, :map, map)
   end
