@@ -23,6 +23,12 @@ defmodule PixelSmashWeb.Router do
     live "/", PageLive, :index
   end
 
+  scope "/test", PixelSmashWeb do
+    pipe_through :browser
+
+    live "/", TestLive, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PixelSmashWeb do
   #   pipe_through :api
