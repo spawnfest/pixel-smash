@@ -6,7 +6,7 @@ defmodule PixelSmashWeb.GladiatorComponent do
       <div class="flex items-start items-center space-x-4" phx-click="show_gladiator" phx-value-id="<%= @gladiator.id %>" %>
         <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @gladiator.sprite %>
         <div>
-          <h2 class="text-lg font-semibold text-gray-100 -mt-1">
+          <h2 class="text-lg font-semibold text-gray-100 -mt-1 overflow-x-hidden">
             <%= @gladiator.name %>
           </h2>
           <small class="block text-sm text-gray-500">

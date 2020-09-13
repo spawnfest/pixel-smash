@@ -2,6 +2,7 @@ defmodule PixelSmashWeb.InProgressBattleComponent do
   use PixelSmashWeb, :live_component
 
   alias PixelSmash.Battles
+  alias PixelSmashWeb.GladiatorComponent
 
   @impl true
   def mount(socket) do

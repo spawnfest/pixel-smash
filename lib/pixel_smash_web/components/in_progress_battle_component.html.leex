@@ -7,29 +7,8 @@
 
   <div class="flex flex-row items-start px-4 py-6 space-x-4">
     <div class="flex flex-col items-start space-y-4">
-      <div class="flex items-start items-center space-x-4">
-        <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @left.sprite %>
-        <div>
-          <h2 class="text-lg font-semibold text-gray-100 -mt-1 overflow-x-hidden">
-            <%= @left.name %>
-          </h2>
-          <small class="block text-sm text-gray-500">
-            Health <%= @left.health %>
-          </small>
-        </div>
-      </div>
-
-      <div class="flex items-start items-center space-x-4">
-        <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @right.sprite %>
-        <div>
-          <h2 class="text-lg font-semibold text-gray-100 -mt-1 overflow-x-hidden">
-            <%= @right.name %>
-          </h2>
-          <small class="block text-sm text-gray-500">
-            Health <%= @right.health %>
-          </small>
-        </div>
-      </div>
+      <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @left, text: "Health#{@left.health}" %>
+      <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @right, text: "Health#{@right.health}" %>
     </div>
 
     <div class="flex flex-col flex-initial items-start space-y-2">
