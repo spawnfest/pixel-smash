@@ -8,20 +8,22 @@ defmodule PixelSmash.Wallets.Vault do
       iex>
       ...> pid = start_supervised!({Vault, [restore_fn: fn -> [Wallet.new("user_1", "250.00")] end, name: :test_vault]})
       ...> [%Wallet{deposit: deposit, id: _, user_id: "user_1"}] = Vault.list_wallets(pid)
-      ...> Decimal.eq?("250.0", deposit)
+      ...> true = Decimal.eq?("250.0", deposit)
       iex>
       ...> Vault.put_wallet(pid, Wallet.new("+0", "user_0", 100))
       ...> [%Wallet{id: "+0", user_id: "user_0"}, %Wallet{id: _, user_id: "user_1"}] = Vault.list_wallets(pid)
       iex>
       ...> %Wallet{user_id: "user_1", deposit: deposit} = Vault.get_wallet_by_user(pid, "user_1")
-      ...> Decimal.eq?("250.0", deposit)
+      ...> true = Decimal.eq?("250.0", deposit)
       iex>
       ...> %Wallet{deposit: deposit} = Vault.get_wallet(pid, "+0")
-      ...> Decimal.eq?(100, deposit)
+      ...> true = Decimal.eq?(100, deposit)
       iex>
       ...> {:ok, %Wallet{id: "+0", deposit: deposit}} = Vault.update_wallet(pid, "+0", fn wallet -> %{wallet | deposit: Decimal.add(wallet.deposit, 50)} end)
       ...> %Wallet{deposit: ^deposit} = Vault.get_wallet(pid, "+0")
-      ...> Decimal.eq?(150, deposit)
+      ...> true = Decimal.eq?(150, deposit)
+      iex>
+      ...> {:error, :notfound} = Vault.update_wallet(pid, "nonexisting_wallet_id", fn _wallet -> nil end)
       iex>
       iex> # If anonymous function passed to update_wallet returns something other then
       ...> # a wallet then the original wallet stays the same and result of anonymous function
@@ -29,7 +31,7 @@ defmodule PixelSmash.Wallets.Vault do
       ...>
       ...> {:error, :reason} = Vault.update_wallet(pid, "+0", fn _wallet -> {:error, :reason} end)
       ...> %Wallet{deposit: deposit} = Vault.get_wallet(pid, "+0")
-      ...> Decimal.eq?(150, deposit)
+      ...> true = Decimal.eq?(150, deposit)
   """
 
   use GenServer
@@ -104,6 +106,7 @@ defmodule PixelSmash.Wallets.Vault do
          %Wallet{id: ^old_id} = updated_wallet <- update_fn.(wallet) do
       {:reply, {:ok, updated_wallet}, do_put_wallet(updated_wallet, vault)}
     else
+      nil -> {:reply, {:error, :notfound}, vault}
       reply -> {:reply, reply, vault}
     end
   end

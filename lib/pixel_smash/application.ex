@@ -14,7 +14,7 @@ defmodule PixelSmash.Application do
       {Phoenix.PubSub, name: PixelSmash.PubSub},
       PixelSmash.Gladiators,
       PixelSmash.Battles,
-      {PixelSmash.Wallets, restore_fn: &PixelSmash.Wallets.restore_wallets/0},
+      {PixelSmash.Wallets, restore_fn: &PixelSmash.Wallets.persisted_wallets/0},
       # Start the Endpoint (http/https)
       PixelSmashWeb.Endpoint
     ]

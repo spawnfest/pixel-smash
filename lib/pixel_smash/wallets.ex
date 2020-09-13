@@ -1,6 +1,24 @@
 defmodule PixelSmash.Wallets do
   @moduledoc """
   Wallets context. Allows to fetch wallet by ID. Fund and withdraw money from it.
+
+  ## Examples
+
+      iex> alias PixelSmash.{Wallets, Wallets.Wallet}
+      iex>
+      ...> %Wallet{user_id: "user_0", deposit: deposit, id: wallet_id} = Wallets.open_wallet("user_0", 300)
+      ...> true = Decimal.eq?(300, deposit)
+      iex>
+      ...> ^wallet_id = Wallets.get_wallet_id("user_0")
+      ...> 300.0 = Wallets.get_ballance(wallet_id)
+      iex>
+      ...> {:error, :not_enough_ballance} = Wallets.take_stake(wallet_id, 500)
+      iex>
+      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, 300)
+      ...> 0.0 = Wallets.get_ballance(wallet_id)
+      iex>
+      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.deposit(wallet_id, 400)
+      ...> 400.0 = Wallets.get_ballance(wallet_id)
   """
 
   alias PixelSmash.Wallets.{
@@ -11,7 +29,7 @@ defmodule PixelSmash.Wallets do
 
   defdelegate child_spec(init_arg), to: Supervisor
 
-  def restore_wallets do
+  def persisted_wallets do
     [Wallet.new("user_1", "250.00")]
   end
 
@@ -21,11 +39,30 @@ defmodule PixelSmash.Wallets do
     |> Vault.put_wallet()
   end
 
-  def get_deposit(wallet_id) do
+  def get_wallet_id(user_id) do
+    %Wallet{id: id} = Vault.get_wallet_by_user(user_id)
+    id
+  end
+
+  def get_ballance(wallet_id) do
     %Wallet{deposit: deposit} = Vault.get_wallet(wallet_id)
-    deposit
+    Decimal.to_float(deposit)
   end
 
   def take_stake(wallet_id, amount) do
+    Vault.update_wallet(wallet_id, fn %Wallet{deposit: deposit} = wallet ->
+      updated_deposit = Decimal.sub(deposit, amount)
+      if Decimal.lt?(updated_deposit, 0) do
+        {:error, :not_enough_ballance}
+      else
+        %{wallet | deposit: updated_deposit}
+      end
+    end)
+  end
+
+  def deposit(wallet_id, amount) do
+    Vault.update_wallet(wallet_id, fn %Wallet{deposit: deposit} = wallet ->
+      %{wallet | deposit: Decimal.add(deposit, amount)}
+    end)
   end
 end
