@@ -1,3 +1,3 @@
 defmodule PixelSmash.Items.Item do
-  defstruct [:map, :data, :x, :y, :type, :name, :attribute]
+  defstruct [:name, :map, :data, :x, :y, :type, :power, :attribute]
 end

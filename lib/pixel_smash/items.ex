@@ -17,7 +17,8 @@ defmodule PixelSmash.Items do
     ]
     |> Enum.random()
     |> (fn f -> f.() end).()
-    |> enhance_item()
+    |> bend_pattern_a_little()
+    |> mirrored()
     |> add_attributes()
   end
 
@@ -25,23 +26,7 @@ defmodule PixelSmash.Items do
     PixelSmash.Sprites.Spritifier.to_sprite(item)
   end
 
-  defp enhance_item(%Item{} = item) do
-    # Randomize pattern
-    item = bend_pattern_a_little(item)
-
-    # Mirror if appropiate
-    item =
-      cond do
-        item.type in [:helmet, :crown, :hat, :googles, :unilens] ->
-          mirror(item)
-
-        item.type in [:stick, :glove] ->
-          mirror?(item)
-
-        true ->
-          item
-      end
-
+  defp add_attributes(%Item{} = item) do
     # Add attribute
     item =
       cond do
@@ -60,9 +45,7 @@ defmodule PixelSmash.Items do
 
     # Generate name
     name(item)
-  end
 
-  defp add_attributes(%Item{} = item) do
     # We create an array of coordinates
     coordinates =
       for y <- 1..item.y, x <- 1..item.x do
@@ -90,7 +73,24 @@ defmodule PixelSmash.Items do
         end
       end)
 
-    Map.put(item, :map, map)
+    item = Map.put(item, :map, map)
+
+    # Add power
+    power =
+      Enum.reduce(item.map, 0, fn {_key, value}, acc ->
+        case value do
+          :empty ->
+            acc
+
+          :no_operation ->
+            acc
+
+          _ ->
+            acc + 1
+        end
+      end)
+
+    Map.put(item, :power, power)
   end
 
   defp bend_pattern_a_little(%Item{} = item) do
@@ -113,6 +113,20 @@ defmodule PixelSmash.Items do
 
       _ ->
         rule
+    end
+  end
+
+  defp mirrored(%Item{} = item) do
+    # Mirror if appropiate
+    cond do
+      item.type in [:helmet, :crown, :hat, :googles, :unilens] ->
+        mirror(item)
+
+      item.type in [:stick, :glove] ->
+        mirror?(item)
+
+      true ->
+        item
     end
   end
 
