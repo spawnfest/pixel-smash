@@ -10,15 +10,15 @@ defmodule PixelSmash.Wallets do
       ...> true = Decimal.eq?(300, deposit)
       iex>
       ...> ^wallet_id = Wallets.get_wallet_id("user_0")
-      ...> 300.0 = Wallets.get_ballance(wallet_id)
+      ...> 300.0 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
       iex>
       ...> {:error, :not_enough_ballance} = Wallets.take_stake(wallet_id, "500")
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, "299.9")
-      ...> 0.1 = Wallets.get_ballance(wallet_id)
+      ...> 0.1 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.fund(wallet_id, "399.9")
-      ...> 400.0 = Wallets.get_ballance(wallet_id)
+      ...> 400.0 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
       iex>
       ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", 300)
       ...> "$300" = Wallets.get_ballance_string(wallet_id)
@@ -51,14 +51,15 @@ defmodule PixelSmash.Wallets do
 
   def get_ballance(wallet_id) do
     %Wallet{deposit: deposit} = Vault.get_wallet(wallet_id)
-    Decimal.to_float(deposit)
+    deposit
   end
 
   def get_ballance_string(wallet_id) do
     wallet_id
     |> get_ballance()
-    |> Kernel.*(100.0)
-    |> round()
+    |> Decimal.mult(100)
+    |> Decimal.round()
+    |> Decimal.to_integer()
     |> Money.new()
     |> Money.to_string()
   end
