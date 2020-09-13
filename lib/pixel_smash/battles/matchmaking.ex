@@ -117,9 +117,7 @@ defmodule PixelSmash.Battles.Matchmaking do
   @impl GenServer
   def handle_info({:DOWN, ref, :process, _pid, {:shutdown, %Battle.Finished{} = battle}}, state) do
     Logger.info(fn ->
-      "Battle finished, id: #{battle.id}, winner: #{battle.winner.name}, loser: #{
-        battle.loser.name
-      }"
+      "Battle finished, id: #{battle.id}, winner: #{battle.winner.id}, loser: #{battle.loser.id}"
     end)
 
     state = %{
@@ -147,7 +145,7 @@ defmodule PixelSmash.Battles.Matchmaking do
     {_, {left, right}} = Map.get(state.current_series, ref)
 
     Logger.error(fn ->
-      "Battle crashed, combatants: {#{left.name}, #{right.name}}"
+      "Battle crashed, combatants: {#{left.id}, #{right.id}}"
     end)
 
     :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)
@@ -184,8 +182,8 @@ defmodule PixelSmash.Battles.Matchmaking do
 
   defp start_next_series(state) do
     Enum.each(state.current_series, fn {ref, {pid, {left, right}}} ->
-      Logger.error(fn ->
-        "Terminating battle as a draw, combatants: {#{left.name}, #{right.name}}"
+      Logger.info(fn ->
+        "Terminating battle as a draw, combatants: {#{left.id}, #{right.id}}"
       end)
 
       :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)

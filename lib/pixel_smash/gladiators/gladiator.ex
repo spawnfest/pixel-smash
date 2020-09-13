@@ -13,6 +13,9 @@ defmodule PixelSmash.Gladiators.Gladiator do
   defdata do
     id :: id()
     elo :: non_neg_integer()
+    wins :: non_neg_integer()
+    losses :: non_neg_integer()
+    draws :: non_neg_integer()
     name :: String.t()
     sprite :: map()
     max_health :: non_neg_integer()
@@ -27,6 +30,9 @@ defmodule PixelSmash.Gladiators.Gladiator do
     %Gladiator{
       id: Ecto.UUID.generate(),
       elo: 1500,
+      wins: 0,
+      losses: 0,
+      draws: 0,
       sprite:
         Sprites.generate_sprite(10, 10, fn ->
           Enum.random([

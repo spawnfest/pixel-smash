@@ -62,6 +62,20 @@ defmodule PixelSmash.Gladiators.Store do
 
     {left, right} = ELO.handle_battle_result({left, right}, winner)
 
+    left =
+      case winner do
+        :left -> %Gladiator{left | wins: left.wins + 1}
+        :draw -> %Gladiator{left | draws: left.draws + 1}
+        :right -> %Gladiator{left | losses: left.losses + 1}
+      end
+
+    right =
+      case winner do
+        :left -> %Gladiator{right | losses: right.losses + 1}
+        :draw -> %Gladiator{right | draws: right.draws + 1}
+        :right -> %Gladiator{right | wins: right.wins + 1}
+      end
+
     store =
       store
       |> Map.put(left_id, left)
