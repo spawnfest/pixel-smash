@@ -96,16 +96,18 @@ defmodule PixelSmash.Items do
     # Randomizes all `"?"` characters from a template
     data =
       Enum.map(item.data, fn row ->
-        Enum.map(row, fn rule ->
-          if rule == "?" do
-            Enum.random([" ", "X"])
-          else
-            rule
-          end
-        end)
+        Enum.map(row, &randomize_rule/1)
       end)
 
     Map.put(item, :data, data)
+  end
+
+  defp randomize_rule(rule) do
+    if rule == "?" do
+      Enum.random([" ", "X"])
+    else
+      rule
+    end
   end
 
   defp mirror?(%Item{} = item) do

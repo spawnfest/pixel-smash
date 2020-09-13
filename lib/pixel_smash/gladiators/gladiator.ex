@@ -30,7 +30,6 @@ defmodule PixelSmash.Gladiators.Gladiator do
       PixelSmash.Attributes.all()
       |> Enum.shuffle()
       |> Enum.take(number_of_attrs)
-      |> IO.inspect()
 
     data =
       PixelSmash.Grids.generate(5, 10, fn _, _ ->
