@@ -38,6 +38,8 @@ defmodule PixelSmash.Wallets.Vault do
 
   alias PixelSmash.Wallets.Wallet
 
+  @initial_deposit 250
+
   def start_link(opts) do
     restore_fn = Keyword.fetch!(opts, :restore_fn)
     name = Keyword.get(opts, :name, __MODULE__)
@@ -93,6 +95,8 @@ defmodule PixelSmash.Wallets.Vault do
   end
 
   def handle_call({:get_wallet_by_user, id}, _from, vault) do
+    vault = put_initial_wallet(vault, id)
+
     wallet =
       vault
       |> Map.values()
@@ -113,5 +117,11 @@ defmodule PixelSmash.Wallets.Vault do
 
   defp do_put_wallet(%Wallet{id: id} = wallet, vault) do
     Map.put(vault, id, wallet)
+  end
+
+  defp put_initial_wallet(vault, user_id) do
+    wallet = Wallet.new(user_id, @initial_deposit)
+
+    Map.put_new(vault, wallet.id, wallet)
   end
 end

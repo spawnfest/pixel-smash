@@ -6,9 +6,6 @@ defmodule PixelSmash.Wallets do
 
       iex> alias PixelSmash.{Wallets, Wallets.Wallet}
       iex>
-      ...> %Wallet{user_id: "user_0", deposit: deposit, id: wallet_id} = Wallets.open_wallet("user_0", "300")
-      ...> true = Decimal.eq?(300, deposit)
-      iex>
       ...> ^wallet_id = Wallets.get_wallet_id("user_0")
       ...> 300.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
@@ -19,11 +16,6 @@ defmodule PixelSmash.Wallets do
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.fund(wallet_id, "399.9")
       ...> 400.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
-      iex>
-      ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", 300)
-      ...> "$300" = Wallets.get_balance_string(wallet_id)
-      ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", "301.33333333")
-      ...> "$301,33" = Wallets.get_balance_string(wallet_id)
   """
 
   alias PixelSmash.Wallets.{
@@ -35,13 +27,7 @@ defmodule PixelSmash.Wallets do
   defdelegate child_spec(init_arg), to: Supervisor
 
   def persisted_wallets do
-    [Wallet.new(1, "250.00")]
-  end
-
-  def open_wallet(user_id, initial_deposit) do
-    user_id
-    |> Wallet.new(initial_deposit)
-    |> Vault.put_wallet()
+    [Wallet.new(1, "1000.00")]
   end
 
   def get_wallet_id(user_id) do
