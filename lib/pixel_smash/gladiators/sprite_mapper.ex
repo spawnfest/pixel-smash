@@ -32,44 +32,44 @@ defmodule PixelSmash.Gladiators.SpriteMapper do
     {:magic, :blue}
   ]
 
-  def sprite(attributes) do
-    attributes
-    |> Enum.map(&pixel/1)
-    |> Sprites.new_sprite()
-  end
+  # def sprite(attributes) do
+  #  attributes
+  #  |> Enum.map(&pixel/1)
+  #  |> Sprites.new_sprite()
+  # end
 
-  defp pixel({_key, 0}), do: Sprites.background_pixel()
+  # defp pixel({_key, 0}), do: Sprites.background_pixel()
 
-  defp pixel({key, value}) do
-    base_color =
-      Enum.find_value(@attribute_base_color, fn
-        {^key, color} -> color
-        _ -> nil
-      end)
+  # defp pixel({key, value}) do
+  #  base_color =
+  #    Enum.find_value(@attribute_base_color, fn
+  #      {^key, color} -> color
+  #      _ -> nil
+  #    end)
 
-    Sprites.new_pixel(base_color, value)
-  end
+  #  Sprites.new_pixel(base_color, value)
+  # end
 
-  def attributes(%Sprite{map: map, x: size_x}) do
-    base_colors = Enum.map(@attribute_base_color, &elem(&1, 1))
+  # def attributes(%Sprite{map: map, x: size_x}) do
+  #  base_colors = Enum.map(@attribute_base_color, &elem(&1, 1))
 
-    map
-    |> Enum.into([])
-    |> Enum.sort(fn {{x1, y1}, _}, {{x2, y2}, _} -> x1 + y1 * size_x <= x2 + y2 * size_x end)
-    |> Enum.map(fn {_coords, value} -> value end)
-    |> Enum.filter(fn {color, _tint} -> color in base_colors end)
-    |> Enum.reduce([], &put_attribute(&2, &1))
-    |> Enum.reverse()
-  end
+  #  map
+  #  |> Enum.into([])
+  #  |> Enum.sort(fn {{x1, y1}, _}, {{x2, y2}, _} -> x1 + y1 * size_x <= x2 + y2 * size_x end)
+  #  |> Enum.map(fn {_coords, value} -> value end)
+  #  |> Enum.filter(fn {color, _tint} -> color in base_colors end)
+  #  |> Enum.reduce([], &put_attribute(&2, &1))
+  #  |> Enum.reverse()
+  # end
 
-  defp put_attribute(acc, {_base_color, tint} = color) do
-    Keyword.put(acc, find_attribute(color), tint)
-  end
+  # defp put_attribute(acc, {_base_color, tint} = color) do
+  #  Keyword.put(acc, find_attribute(color), tint)
+  # end
 
-  def find_attribute({base_color, _tint}) do
-    Enum.find_value(@attribute_base_color, fn
-      {attribute, ^base_color} -> attribute
-      _ -> nil
-    end)
-  end
+  # def find_attribute({base_color, _tint}) do
+  #  Enum.find_value(@attribute_base_color, fn
+  #    {attribute, ^base_color} -> attribute
+  #    _ -> nil
+  #  end)
+  # end
 end

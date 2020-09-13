@@ -17,6 +17,7 @@ defimpl PixelSmash.Sprites.Spritifier, for: PixelSmash.Items.Item do
       Enum.map(item.map, fn {key, value} ->
         {key, PixelSmash.Attributes.to_color(value)}
       end)
+      |> Enum.into(%{})
 
     # Map it into the Sprite struct
     sprite = %PixelSmash.Sprites.Sprite{
