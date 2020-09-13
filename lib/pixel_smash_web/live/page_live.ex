@@ -1,8 +1,9 @@
 defmodule PixelSmashWeb.PageLive do
   use PixelSmashWeb, :live_view
 
-  alias PixelSmash.Battles
+  alias PixelSmash.{Battles, Gladiators}
   alias PixelSmashWeb.BattleComponentLive, as: BattleComponent
+  alias PixelSmashWeb.StandingsComponentLive, as: StandingsComponent
 
   @tick_rate :timer.seconds(2)
 
@@ -13,6 +14,7 @@ defmodule PixelSmashWeb.PageLive do
       |> assign_defaults(params, session)
       |> assign(:upcoming_battles, Battles.list_upcoming_battles())
       |> assign(:current_battles, Battles.list_current_battles())
+      |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
 
     send(self(), :tick)
 
@@ -27,6 +29,7 @@ defmodule PixelSmashWeb.PageLive do
       socket
       |> assign(:upcoming_battles, Battles.list_upcoming_battles())
       |> assign(:current_battles, Battles.list_current_battles())
+      |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
 
     {:noreply, socket}
   end

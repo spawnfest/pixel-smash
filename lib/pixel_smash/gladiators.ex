@@ -18,6 +18,11 @@ defmodule PixelSmash.Gladiators do
     Store.list_gladiators(store)
   end
 
+  @spec list_gladiators_by_elo(GenServer.name()) :: [Gladiator]
+  def list_gladiators_by_elo(store \\ @store) do
+    Store.list_gladiators_by_elo(store)
+  end
+
   @spec get_gladiator(GenServer.name(), String.t()) :: Gladiator | nil
   def get_gladiator(store \\ @store, id) do
     Store.get_gladiator(store, id)

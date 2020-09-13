@@ -18,6 +18,10 @@ defmodule PixelSmash.Gladiators.Store do
     GenServer.call(pid, :list_gladiators)
   end
 
+  def list_gladiators_by_elo(pid \\ __MODULE__) do
+    GenServer.call(pid, :list_gladiators_by_elo)
+  end
+
   def get_gladiator(pid \\ __MODULE__, id) do
     GenServer.call(pid, {:get_gladiator, id})
   end
@@ -46,6 +50,15 @@ defmodule PixelSmash.Gladiators.Store do
 
   def handle_call(:list_gladiators, _from, store) do
     gladiators = Map.values(store)
+
+    {:reply, gladiators, store}
+  end
+
+  def handle_call(:list_gladiators_by_elo, _from, store) do
+    gladiators =
+      store
+      |> Map.values()
+      |> Enum.sort_by(& &1.elo, :desc)
 
     {:reply, gladiators, store}
   end

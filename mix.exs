@@ -12,7 +12,12 @@ defmodule PixelSmash.MixProject do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.post": :test, "coveralls.html": :test]
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ]
     ]
   end
 
@@ -22,7 +27,7 @@ defmodule PixelSmash.MixProject do
   def application do
     [
       mod: {PixelSmash.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -37,6 +42,7 @@ defmodule PixelSmash.MixProject do
     [
       {:algae, "~> 1.2"},
       {:bcrypt_elixir, "~> 2.0"},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:phoenix, "~> 1.5.4"},
       {:phoenix_ecto, "~> 4.1"},

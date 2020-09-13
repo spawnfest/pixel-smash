@@ -9,3 +9,5 @@
     <%= live_component @socket, BattleComponent, battle: battle %>
   <% end %>
 </div>
+
+<%= live_component @socket, StandingsComponent, gladiators: @gladiators %>
