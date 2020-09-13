@@ -5,28 +5,7 @@
     </span>
   </div>
   <div class="flex flex-col items-start px-4 py-6 space-y-4">
-    <div class="flex items-start items-center space-x-4">
-      <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @left.sprite %>
-      <div>
-        <h2 class="text-lg font-semibold text-gray-100 -mt-1">
-          <%= @left.name %>
-        </h2>
-        <small class="block text-sm text-gray-500">
-          Wins: <%= @left.wins %> Draws: <%= @left.draws %> Losses: <%= @left.losses %>  ELO: <%= @left.elo %>
-        </small>
-      </div>
-    </div>
-
-    <div class="flex items-start items-center space-x-4">
-      <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @right.sprite %>
-      <div>
-        <h2 class="text-lg font-semibold text-gray-100 -mt-1">
-          <%= @right.name %>
-        </h2>
-        <small class="text-sm text-gray-500">
-          Wins: <%= @right.wins %> Draws: <%= @right.draws %> Losses: <%= @right.losses %> ELO: <%= @right.elo %>
-        </small>
-      </div>
-    </div>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @left, text: "Wins: #{@left.wins} Draws: #{@left.draws} Losses: #{@left.losses}  ELO: #{@left.elo}" %>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @right, text: "Wins: #{@right.wins} Draws: #{@left.draws} Losses: #{@right.losses}  ELO: #{@right.elo}" %>
   </div>
 </div>
