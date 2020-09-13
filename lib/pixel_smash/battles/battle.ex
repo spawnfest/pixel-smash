@@ -106,26 +106,7 @@ defmodule PixelSmash.Battles.Battle do
 
   defp next_action(%Fighter{} = fighter, %Fighter{} = opponent) do
     {properties, fighter} = Fighter.next_action_properties(fighter)
-    {action_from_properties(properties, fighter, opponent), fighter}
-  end
-
-  defp action_from_properties(properties, fighter, opponent) do
-    case properties.kind do
-      :cast ->
-        %Action.Cast{
-          fighter: fighter,
-          target: opponent,
-          damage: properties.damage,
-          spell_name: properties.spell_name
-        }
-
-      :attack ->
-        %Action.Attack{
-          fighter: fighter,
-          target: opponent,
-          damage: properties.damage
-        }
-    end
+    {Action.from_properties(properties, fighter, opponent), fighter}
   end
 
   def apply_exhaustion(%Fighter{} = fighter, action) do
