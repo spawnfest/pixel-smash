@@ -5,19 +5,12 @@ defmodule PixelSmashWeb.TheStoreLive do
 
   use PixelSmashWeb, :live_view
 
-  @tick_rate :timer.seconds(5)
-
   @impl true
   def mount(params, session, socket) do
-    IO.inspect(params)
-    IO.inspect(session)
-
     socket =
       socket
       |> assign_defaults(params, session)
       |> assign(:the_store, PixelSmash.TheStore.on_sale())
-
-    # send(self(), :tick)
 
     {:ok, socket}
   end
@@ -45,8 +38,4 @@ defmodule PixelSmashWeb.TheStoreLive do
   def handle_info(_message, socket) do
     {:noreply, socket}
   end
-
-  # defp schedule_next_tick() do
-  #  Process.send_after(self(), :tick, @tick_rate)
-  # end
 end

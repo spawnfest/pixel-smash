@@ -8,6 +8,7 @@ defmodule PixelSmashWeb.PageLive do
 
   alias PixelSmash.{
     Battles,
+    Betting,
     Gladiators
   }
 
