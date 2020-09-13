@@ -1,4 +1,9 @@
 defmodule PixelSmashWeb.PageLive do
+  @moduledoc """
+  This contains the bulk of logic for handling the front end portion of the
+  PixelSmash Arena. Currently we are using a polling system with a timer to
+  update the current battle events happening through the scheduler.
+  """
   use PixelSmashWeb, :live_view
 
   alias PixelSmash.{
@@ -11,7 +16,6 @@ defmodule PixelSmashWeb.PageLive do
     FinishedBattleComponent,
     InProgressBattleComponent,
     ScheduledBattleComponent,
-    StandingsComponent
   }
 
   @tick_rate :timer.seconds(2)
@@ -31,25 +35,6 @@ defmodule PixelSmashWeb.PageLive do
     send(self(), :tick)
 
     {:ok, socket}
-  end
-
-  @impl true
-  def handle_event("resort_standings", _params, %{assigns: %{sort_order: :desc}} = socket) do
-    socket =
-      socket
-      |> assign(:sort_order, :asc)
-      |> assign(:gladiators, Gladiators.list_gladiators_by_elo(:asc))
-
-    {:noreply, socket}
-  end
-
-  def handle_event("resort_standings", _params, %{assigns: %{sort_order: :asc}} = socket) do
-    socket =
-      socket
-      |> assign(:sort_order, :desc)
-      |> assign(:gladiators, Gladiators.list_gladiators_by_elo(:desc))
-
-    {:noreply, socket}
   end
 
   def handle_event("show_gladiator", %{"id" => id}, socket) do

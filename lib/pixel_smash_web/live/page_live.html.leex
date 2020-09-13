@@ -1,3 +1,8 @@
+<div class="text-right">
+  <%= link "Standings", to: Routes.standings_path(@socket, :index), class: "text-white mx-4 text-xl" %>
+  <%= link "Gladiators", to: Routes.gladiator_path(@socket, :index), class: "text-white text-xl" %>
+</div>
+
 <%= if not Enum.empty?(@current_battles) do %>
   <h2 class="text-center text-white text-2xl">In-Progress Battles</h2>
   <div class="flex flex-grow flex-wrap mb-4 justify-evenly">
@@ -25,7 +30,6 @@
   </div>
 <% end %>
 
-<%= live_component @socket, StandingsComponent, gladiators: @gladiators %>
 
 <%= if not Enum.empty?(@the_store) do %>
   <h2 class="text-center text-white text-2xl">The Store</h2>
