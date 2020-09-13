@@ -8,11 +8,19 @@ defmodule PixelSmashWeb.FinishedBattleComponent do
 
   @impl true
   def update(assigns, socket) do
+    {left, right} = assigns.battle.fighters
+
     socket =
       socket
-      |> assign(:winner, assigns.battle.winner)
-      |> assign(:loser, assigns.battle.loser)
+      |> assign(:battle, assigns.battle)
+      |> assign(:left, left)
+      |> assign(:right, right)
 
     {:ok, socket}
   end
+
+  def outcome(:left, :left), do: "Winner"
+  def outcome(:right, :right), do: "Winner"
+  def outcome(_, :draw), do: "Draw"
+  def outcome(_, _), do: "Loser"
 end

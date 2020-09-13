@@ -69,10 +69,7 @@ defmodule PixelSmash.Gladiators.Store do
     {:reply, gladiator, store}
   end
 
-  def handle_call({:register_battle_result, {left_id, right_id}, winner}, _from, store) do
-    left = Map.get(store, left_id)
-    right = Map.get(store, right_id)
-
+  def handle_call({:register_battle_result, {left, right}, winner}, _from, store) do
     {left, right} = ELO.handle_battle_result({left, right}, winner)
 
     left =
@@ -91,11 +88,11 @@ defmodule PixelSmash.Gladiators.Store do
 
     store =
       store
-      |> Map.put(left_id, left)
-      |> Map.put(right_id, right)
+      |> Map.put(left.id, left)
+      |> Map.put(right.id, right)
 
     Logger.info(fn ->
-      "Registering a battle result for combatants: {#{left_id}, #{right_id}}, winner: #{winner}"
+      "Registering a battle result for combatants: {#{left.id}, #{right.id}}, winner: #{winner}"
     end)
 
     {:reply, :ok, store}

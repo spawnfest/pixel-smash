@@ -4,12 +4,11 @@ defmodule PixelSmash.Gladiators do
   """
 
   alias PixelSmash.Gladiators.{
+    ELO,
     Gladiator,
     Store,
     Supervisor
   }
-
-  alias PixelSmash.Sprites
 
   @store Store
 
@@ -30,13 +29,23 @@ defmodule PixelSmash.Gladiators do
     Store.get_gladiator(store, id)
   end
 
+  @spec expected_battle_result({Gladiator.t(), Gladiator.t()}) :: {float(), float()}
+  def expected_battle_result({%Gladiator{} = left, %Gladiator{} = right}) do
+    left_chances =
+      ELO.expected_result(left, right)
+      |> Decimal.from_float()
+
+    right_chances = Decimal.sub(1, left_chances)
+
+    {left_chances, right_chances}
+  end
+
   @spec register_battle_result(
           GenServer.name(),
-          {Gladiator.id(), Gladiator.id()},
+          {Gladiator.t(), Gladiator.t()},
           :left | :draw | :right
         ) :: :ok
-  def register_battle_result(store \\ @store, {left, right} = matchup, winner)
-      when is_binary(left) and is_binary(right) do
+  def register_battle_result(store \\ @store, {%Gladiator{}, %Gladiator{}} = matchup, winner) do
     Store.register_battle_result(store, matchup, winner)
   end
 

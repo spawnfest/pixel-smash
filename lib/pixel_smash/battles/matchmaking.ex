@@ -126,8 +126,12 @@ defmodule PixelSmash.Battles.Matchmaking do
 
   @impl GenServer
   def handle_info({:DOWN, ref, :process, _pid, {:shutdown, %Battle.Finished{} = battle}}, state) do
+    {left, right} = battle.fighters
+
     Logger.info(fn ->
-      "Battle finished, id: #{battle.id}, winner: #{battle.winner.id}, loser: #{battle.loser.id}"
+      "Battle finished, id: #{battle.id}, combatants: {#{left.id}, #{right.id}}, outcome: #{
+        battle.outcome
+      }"
     end)
 
     state = %{
@@ -136,7 +140,17 @@ defmodule PixelSmash.Battles.Matchmaking do
         finished_battles: [battle | state.finished_battles]
     }
 
-    :ok = Gladiators.register_battle_result({battle.winner.id, battle.loser.id}, :left)
+    :ok =
+      Gladiators.register_battle_result(
+        {Gladiators.get_gladiator(left.id), Gladiators.get_gladiator(right.id)},
+        battle.outcome
+      )
+
+    Phoenix.PubSub.broadcast(
+      PixelSmash.PubSub,
+      "battles:*",
+      {:battle_finished, battle}
+    )
 
     if map_size(state.current_series) == 0 do
       Logger.info(fn ->
@@ -158,7 +172,11 @@ defmodule PixelSmash.Battles.Matchmaking do
       "Battle crashed, combatants: {#{left.id}, #{right.id}}"
     end)
 
-    :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)
+    :ok =
+      Gladiators.register_battle_result(
+        {Gladiators.get_gladiator(left.id), Gladiators.get_gladiator(right.id)},
+        :draw
+      )
 
     state = %{state | current_series: Map.delete(state.current_series, ref)}
 
@@ -186,6 +204,12 @@ defmodule PixelSmash.Battles.Matchmaking do
       {:ok, pid} = BattleSupervisor.schedule_battle(combatants)
       ref = Process.monitor(pid)
 
+      Phoenix.PubSub.broadcast(
+        PixelSmash.PubSub,
+        "battles:*",
+        {:battle_scheduled, BattleServer.get_battle(pid)}
+      )
+
       Map.put(acc, ref, {pid, combatants})
     end)
   end
@@ -196,7 +220,11 @@ defmodule PixelSmash.Battles.Matchmaking do
         "Terminating battle as a draw, combatants: {#{left.id}, #{right.id}}"
       end)
 
-      :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)
+      :ok =
+        Gladiators.register_battle_result(
+          {Gladiators.get_gladiator(left.id), Gladiators.get_gladiator(right.id)},
+          :draw
+        )
 
       Process.demonitor(ref)
       BattleSupervisor.terminate_battle_server(pid)
@@ -204,6 +232,12 @@ defmodule PixelSmash.Battles.Matchmaking do
 
     Enum.each(state.next_series, fn {_ref, {pid, _combatants}} ->
       BattleServer.start_battle(pid)
+
+      Phoenix.PubSub.broadcast(
+        PixelSmash.PubSub,
+        "battles:*",
+        {:battle_started, BattleServer.get_battle(pid)}
+      )
     end)
 
     timer_ref = Process.send_after(self(), :max_series_length_exceeded, @max_series_length)

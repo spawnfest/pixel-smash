@@ -5,7 +5,7 @@
     </span>
   </div>
   <div class="flex flex-col items-start px-4 py-6 space-y-4">
-    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @winner, text: "Winner" %>
-    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @loser, text: "Loser" %>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @left, text: outcome(:left, @battle.outcome) %>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @right, text: outcome(:right, @battle.outcome) %>
   </div>
 </div>

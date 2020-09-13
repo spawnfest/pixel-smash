@@ -12,9 +12,10 @@ defmodule PixelSmash.Application do
       PixelSmashWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: PixelSmash.PubSub},
-      PixelSmash.Gladiators,
-      PixelSmash.Battles,
       {PixelSmash.Wallets, restore_fn: &PixelSmash.Wallets.persisted_wallets/0},
+      PixelSmash.Gladiators,
+      PixelSmash.Betting,
+      PixelSmash.Battles,
       # Start the Endpoint (http/https)
       PixelSmashWeb.Endpoint
     ]

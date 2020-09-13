@@ -24,8 +24,8 @@ defmodule PixelSmash.Battles.Battle do
 
     defdata Finished do
       id :: Battle.id()
-      winner :: Fighter.t()
-      loser :: Fighter.t()
+      fighters :: {Fighter.t(), Fighter.t()} \\ nil
+      outcome :: :left | :draw | :right
       log :: Log.t()
     end
   end
@@ -130,10 +130,20 @@ defmodule PixelSmash.Battles.Battle do
   def check_if_finished(%Battle.InProgress{fighters: {left, right}} = battle) do
     case {left.health, right.health} do
       {n, _} when n <= 0 ->
-        %Battle.Finished{id: battle.id, winner: right, loser: left, log: battle.log}
+        %Battle.Finished{
+          id: battle.id,
+          fighters: battle.fighters,
+          outcome: :right,
+          log: battle.log
+        }
 
       {_, n} when n <= 0 ->
-        %Battle.Finished{id: battle.id, winner: left, loser: right, log: battle.log}
+        %Battle.Finished{
+          id: battle.id,
+          fighters: battle.fighters,
+          outcome: :left,
+          log: battle.log
+        }
 
       _ ->
         battle
