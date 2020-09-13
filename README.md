@@ -2,6 +2,8 @@
 
 Spectators! Get your bets ready for the next Season of Pixel Smash! This time we have new Gladiators coming from all corners of the pixel-verse ready to give it all. As the fights go some will continue, some will be pixelated, new fighters will be born from freak cosmic fusion accidents.
 
+![](assets/static/images/logo.jpg)
+
 # Start the Season!
 
 To start your Phoenix server:
