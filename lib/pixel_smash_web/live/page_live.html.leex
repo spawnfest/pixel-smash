@@ -1,6 +1,7 @@
 <div class="text-right">
   <%= link "Standings", to: Routes.standings_path(@socket, :index), class: "text-white mx-4 text-xl" %>
   <%= link "Gladiators", to: Routes.gladiator_path(@socket, :index), class: "text-white text-xl" %>
+  <%= link "The Store", to: Routes.the_store_path(@socket, :index), class: "text-white text-xl" %>
 </div>
 
 <%= if not Enum.empty?(@current_battles) do %>
@@ -27,16 +28,5 @@
     <%= for battle <- @upcoming_battles do %>
       <%= live_component @socket, ScheduledBattleComponent, battle: battle %>
     <% end %>
-  </div>
-<% end %>
-
-
-<%= if not Enum.empty?(@the_store) do %>
-  <h2 class="text-center text-white text-2xl">The Store</h2>
-    <div class="grid grid-flow-col grid-cols-3 grid-rows-2">
-      <%= for item <- @the_store do %>
-        <%= live_component @socket, PixelSmashWeb.ItemComponent, item: item.item, sprite: item.sprite %>
-      <% end %>
-    </div>
   </div>
 <% end %>

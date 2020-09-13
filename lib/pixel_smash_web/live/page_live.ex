@@ -8,14 +8,13 @@ defmodule PixelSmashWeb.PageLive do
 
   alias PixelSmash.{
     Battles,
-    Gladiators,
-    TheStore
+    Gladiators
   }
 
   alias PixelSmashWeb.{
     FinishedBattleComponent,
     InProgressBattleComponent,
-    ScheduledBattleComponent,
+    ScheduledBattleComponent
   }
 
   @tick_rate :timer.seconds(2)
@@ -29,7 +28,6 @@ defmodule PixelSmashWeb.PageLive do
       |> assign(:finished_battles, Battles.list_finished_battles())
       |> assign(:current_battles, Battles.list_current_battles())
       |> assign(:gladiators, Gladiators.list_gladiators_by_elo())
-      |> assign(:the_store, TheStore.on_sale())
       |> assign(:sort_order, :desc)
 
     send(self(), :tick)

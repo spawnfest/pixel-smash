@@ -24,6 +24,7 @@ defmodule PixelSmashWeb.Router do
     live "/gladiator/", GladiatorLive, :index
     live "/gladiator/:id", GladiatorLive, :show
     live "/standings/", StandingsLive, :index
+    live "/thestore/", TheStoreLive, :index
   end
 
   # Other scopes may use custom stacks.
