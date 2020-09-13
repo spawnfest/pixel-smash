@@ -23,6 +23,10 @@ defmodule PixelSmash.Betting.Bookie do
     GenServer.call(pid, {:get_expected_winnings, battle, side, amount})
   end
 
+  def get_bet(pid \\ __MODULE__, battle, user) do
+    GenServer.call(pid, {:get_bet, battle, user})
+  end
+
   def place_bet(pid \\ __MODULE__, battle, bet) do
     GenServer.call(pid, {:place_bet, battle, bet})
   end
@@ -57,6 +61,20 @@ defmodule PixelSmash.Betting.Bookie do
         winnings = calculate_expected_winnings(odds, side, amount)
 
         {:reply, {:ok, winnings}, state}
+    end
+  end
+
+  def handle_call({:get_bet, battle, user}, _from, state) do
+    case battle do
+      %Battles.Battle.Scheduled{} ->
+        bet = do_get_bet(state.open_books, battle.id, user)
+
+        {:reply, bet, state}
+
+      %Battles.Battle.InProgress{} ->
+        bet = do_get_bet(state.closed_books, battle.id, user)
+
+        {:reply, bet, state}
     end
   end
 
@@ -141,6 +159,15 @@ defmodule PixelSmash.Betting.Bookie do
           state
           | closed_books: closed_books
         }
+    end
+  end
+
+  defp do_get_bet(books, battle_id, user) do
+    case Map.get(books, battle_id) do
+      nil ->
+        nil
+      {_, bets} ->
+        Enum.find(bets, fn {better, _, _} -> user.id == better.id end)
     end
   end
 

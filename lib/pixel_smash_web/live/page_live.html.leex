@@ -24,9 +24,9 @@
 
 <%= if not Enum.empty?(@upcoming_battles) do %>
   <h2 class="text-center text-white text-2xl">Upcoming Battles</h2>
-  <div class="flex flex-grow flex-wrap mb-4 justify-evenly">
+  <div class="flex flex-col flex-wrap mb-4 items-center justify-evenly">
     <%= for battle <- @upcoming_battles do %>
-      <%= live_component @socket, ScheduledBattleComponent, battle: battle %>
+      <%= live_component @socket, ScheduledBattleComponent, id: battle.id, battle: battle, current_user: @current_user %>
     <% end %>
   </div>
 <% end %>

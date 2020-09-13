@@ -35,6 +35,22 @@ defmodule PixelSmashWeb.PageLive do
     {:ok, socket}
   end
 
+
+  @impl true
+  def handle_event("bet", %{"side" => side, "amount" => amount, "battle" => battle_id}, socket) do
+    side = case side do
+      "left" -> :left
+      "right" -> :right
+    end
+
+    battle = Battles.get_battle(battle_id)
+    :ok = Betting.place_bet(battle, {socket.assigns.current_user, side, String.to_integer(amount)})
+
+    send_update ScheduledBattleComponent, id: battle.id, battle: battle, current_user: socket.assigns.current_user
+
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_event("show_gladiator", %{"id" => id}, socket) do
     {:noreply, push_redirect(socket, to: "/gladiator/#{id}")}

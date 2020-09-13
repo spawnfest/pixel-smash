@@ -23,6 +23,12 @@ defmodule PixelSmash.Betting do
     Betting.Bookie.get_expected_winnings(bookie, battle, side, amount)
   end
 
+  def get_bet(bookie \\ Betting.Bookie, battle, user)
+  def get_bet(_bookie, _battle, nil), do: nil
+  def get_bet(bookie, battle, %Accounts.User{} = user) do
+    Betting.Bookie.get_bet(bookie, battle, user)
+  end
+
   def place_bet(
         bookie \\ Betting.Bookie,
         %Battles.Battle.Scheduled{} = battle,
