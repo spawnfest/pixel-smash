@@ -9,14 +9,13 @@ defmodule PixelSmashWeb.SpriteComponent do
       viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>"
       xmlns="http://www.w3.org/2000/svg"
       shape-rendering="crispEdges">
-        <%= for {{x, y}, {base_color, tint}} <- @sprite.map do %>
+        <%= for {{x, y}, base_color} <- @sprite.map do %>
           <rect
             x="<%= x %>"
             y="<%= y %>"
             width="1"
             height="1"
             fill="<%= fill_color(base_color) %>"
-            fill-opacity="<%= 0.2 + abs((tint / 100.0) - 0.2) %>"
           />
         <% end %>
     </svg>
@@ -30,7 +29,6 @@ defmodule PixelSmashWeb.SpriteComponent do
 
   defp hsl(base_color) do
     case base_color do
-      :black -> {0, 0, 3}
       :green -> {76, 100, 71}
       :blue -> {216, 100, 69}
       :yellow -> {46, 100, 68}

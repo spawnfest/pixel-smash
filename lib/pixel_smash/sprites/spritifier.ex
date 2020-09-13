@@ -44,3 +44,19 @@ defimpl PixelSmash.Sprites.Spritifier, for: PixelSmash.Items.Item do
     end
   end
 end
+
+defimpl PixelSmash.Sprites.Spritifier, for: PixelSmash.Gladiators.Gladiator do
+  def to_sprite(%PixelSmash.Gladiators.Gladiator{} = gladiator) do
+    map =
+      gladiator.data
+      |> PixelSmash.Grids.to_map(10, 10)
+      |> Enum.map(fn {k, v} -> {k, PixelSmash.Attributes.to_color(v)} end)
+      |> Enum.into(%{})
+
+    %PixelSmash.Sprites.Sprite{
+      x: 10,
+      y: 10,
+      map: map
+    }
+  end
+end

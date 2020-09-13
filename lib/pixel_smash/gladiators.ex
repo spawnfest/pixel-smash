@@ -37,4 +37,12 @@ defmodule PixelSmash.Gladiators do
       when is_binary(left) and is_binary(right) do
     Store.register_battle_result(store, matchup, winner)
   end
+
+  def generate() do
+    PixelSmash.Gladiators.Gladiator.generate()
+  end
+
+  def to_sprite(gladiator) do
+    PixelSmash.Sprites.Spritifier.to_sprite(gladiator)
+  end
 end
