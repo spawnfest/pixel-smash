@@ -1,33 +1,34 @@
-defmodule PixelSmash.Battles.ActionDeck do
-  alias PixelSmash.{
-    Battles.Action,
-    Sprites
-  }
+defmodule PixelSmash.Battles.ActionPropertiesDeck do
+  alias PixelSmash.Sprites
 
   # counts of colors should be >= 0
   @colors_attack_multiplier [
-    {%{red: 12, pink: 5}, 10},
-    {%{dark_red: 7, dark_green: 3}, 5},
+    {%{red: 12, pink: 5}, 3},
+    {%{dark_red: 7, dark_green: 3}, 2},
     {%{red: 3}, 1}
   ]
 
   @colors_cast_multiplier [
-    {%{purple: 12, dark_pink: 5}, 10},
+    {%{purple: 12, dark_pink: 5}, 7},
     {%{dark_purple: 12, vitality: 5}, 2},
     {%{purple: 12}, 1}
   ]
 
-  def deck_for_fighter(fighter, opponent) do
+  @doc """
+  Generates attack and cast action properties from colors stats of given fighter's Sprite.
+  Always adds one extra attack action properties set for case when there are no appropriate colors in the Sprite.
+  """
+  def actions_properties(fighter) do
     stats = Sprites.stats(fighter.sprite)
-    actions(stats, fighter, opponent)
+    properties_from_stats(stats, fighter)
   end
 
-  def actions(stats, fighter, opponent) do
+  defp properties_from_stats(stats, fighter) do
     {_, attack_actions} =
       Enum.reduce(@colors_attack_multiplier, {stats, []}, fn {color_count, multiplier},
                                                              {stats, actions} ->
         {stats, reductions_count} = reduce_stats(stats, color_count)
-        attacks = List.duplicate(attack_action(fighter, opponent, multiplier), reductions_count)
+        attacks = List.duplicate(attack_action_properties(fighter, multiplier), reductions_count)
         {stats, actions ++ attacks}
       end)
 
@@ -35,11 +36,11 @@ defmodule PixelSmash.Battles.ActionDeck do
       Enum.reduce(@colors_cast_multiplier, {stats, []}, fn {color_count, multiplier},
                                                            {stats, actions} ->
         {stats, reductions_count} = reduce_stats(stats, color_count)
-        attacks = List.duplicate(cast_action(fighter, opponent, multiplier), reductions_count)
+        attacks = List.duplicate(cast_action_properties(fighter, multiplier), reductions_count)
         {stats, actions ++ attacks}
       end)
 
-    attack_actions ++ cast_actions
+    [attack_action_properties(fighter, 1)] ++ attack_actions ++ cast_actions
   end
 
   defp reduce_stats(stats, color_count, reductions_count \\ 0) do
@@ -61,24 +62,18 @@ defmodule PixelSmash.Battles.ActionDeck do
     end
   end
 
-  defp attack_action(fighter, opponent, multiplier) do
-    %Action.Attack{
-      fighter: fighter,
-      target: opponent,
+  defp attack_action_properties(fighter, multiplier) do
+    %{
+      kind: :attack,
       damage: fighter.strength * multiplier
     }
   end
 
-  defp cast_action(fighter, opponent, multiplier) do
-    %Action.Cast{
-      fighter: fighter,
-      target: opponent,
+  defp cast_action_properties(fighter, multiplier) do
+    %{
+      kind: :cast,
       damage: fighter.magic * multiplier,
       spell_name: Enum.random(fighter.spells)
     }
-  end
-
-  def shuffle(deck) do
-    Enum.shuffle(deck)
   end
 end
