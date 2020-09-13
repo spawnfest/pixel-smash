@@ -10,20 +10,20 @@ defmodule PixelSmash.Wallets do
       ...> true = Decimal.eq?(300, deposit)
       iex>
       ...> ^wallet_id = Wallets.get_wallet_id("user_0")
-      ...> 300.0 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
+      ...> 300.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
-      ...> {:error, :not_enough_ballance} = Wallets.take_stake(wallet_id, "500")
+      ...> {:error, :not_enough_balance} = Wallets.take_stake(wallet_id, "500")
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, "299.9")
-      ...> 0.1 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
+      ...> 0.1 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.fund(wallet_id, "399.9")
-      ...> 400.0 = wallet_id |> Wallets.get_ballance() |> Decimal.to_float()
+      ...> 400.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
       ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", 300)
-      ...> "$300" = Wallets.get_ballance_string(wallet_id)
+      ...> "$300" = Wallets.get_balance_string(wallet_id)
       ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", "301.33333333")
-      ...> "$301,33" = Wallets.get_ballance_string(wallet_id)
+      ...> "$301,33" = Wallets.get_balance_string(wallet_id)
   """
 
   alias PixelSmash.Wallets.{
@@ -49,14 +49,14 @@ defmodule PixelSmash.Wallets do
     id
   end
 
-  def get_ballance(wallet_id) do
+  def get_balance(wallet_id) do
     %Wallet{deposit: deposit} = Vault.get_wallet(wallet_id)
     deposit
   end
 
-  def get_ballance_string(wallet_id) do
+  def get_balance_string(wallet_id) do
     wallet_id
-    |> get_ballance()
+    |> get_balance()
     |> Decimal.mult(100)
     |> Decimal.round()
     |> Decimal.to_integer()
@@ -69,7 +69,7 @@ defmodule PixelSmash.Wallets do
       updated_deposit = Decimal.sub(deposit, amount)
 
       if Decimal.lt?(updated_deposit, 0) do
-        {:error, :not_enough_ballance}
+        {:error, :not_enough_balance}
       else
         %{wallet | deposit: updated_deposit}
       end
