@@ -1,7 +1,12 @@
 defmodule PixelSmash.Gladiators.Store do
   use GenServer
 
-  alias PixelSmash.Gladiators.Gladiator
+  require Logger
+
+  alias PixelSmash.Gladiators.{
+    ELO,
+    Gladiator
+  }
 
   @max_gladiators 16
 
@@ -15,6 +20,10 @@ defmodule PixelSmash.Gladiators.Store do
 
   def get_gladiator(pid \\ __MODULE__, id) do
     GenServer.call(pid, {:get_gladiator, id})
+  end
+
+  def register_battle_result(pid \\ __MODULE__, matchup, winner) do
+    GenServer.call(pid, {:register_battle_result, matchup, winner})
   end
 
   def init(_init_arg) do
@@ -45,5 +54,23 @@ defmodule PixelSmash.Gladiators.Store do
     gladiator = Map.get(store, id)
 
     {:reply, gladiator, store}
+  end
+
+  def handle_call({:register_battle_result, {left_id, right_id}, winner}, _from, store) do
+    left = Map.get(store, left_id)
+    right = Map.get(store, right_id)
+
+    {left, right} = ELO.handle_battle_result({left, right}, winner)
+
+    store =
+      store
+      |> Map.put(left_id, left)
+      |> Map.put(right_id, right)
+
+    Logger.info(fn ->
+      "Registering a battle result for combatants: {#{left_id}, #{right_id}}, winner: #{winner}"
+    end)
+
+    {:reply, :ok, store}
   end
 end

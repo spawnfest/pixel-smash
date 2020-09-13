@@ -8,8 +8,11 @@ defmodule PixelSmash.Gladiators.Gladiator do
     SpriteMapper
   }
 
+  @type id :: String.t()
+
   defdata do
-    id :: String.t()
+    id :: id()
+    elo :: non_neg_integer()
     name :: String.t()
     sprite :: map()
     max_health :: non_neg_integer()
@@ -23,6 +26,7 @@ defmodule PixelSmash.Gladiators.Gladiator do
     # Temporarily we use a random sprite. We need to hook sprites up to stats
     %Gladiator{
       id: Ecto.UUID.generate(),
+      elo: 1500,
       sprite:
         Sprites.generate_sprite(10, 10, fn ->
           Enum.random([

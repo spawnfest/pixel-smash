@@ -128,6 +128,8 @@ defmodule PixelSmash.Battles.Matchmaking do
         finished_battles: [battle | state.finished_battles]
     }
 
+    :ok = Gladiators.register_battle_result({battle.winner.id, battle.loser.id}, :left)
+
     if map_size(state.current_series) == 0 do
       Logger.info(fn ->
         "All battles finished, starting the next series in #{@time_between_series} seconds"
@@ -148,7 +150,7 @@ defmodule PixelSmash.Battles.Matchmaking do
       "Battle crashed, combatants: {#{left.name}, #{right.name}}"
     end)
 
-    # TODO Punish crashed combatants
+    :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)
 
     state = %{state | current_series: Map.delete(state.current_series, ref)}
 
@@ -182,10 +184,11 @@ defmodule PixelSmash.Battles.Matchmaking do
 
   defp start_next_series(state) do
     Enum.each(state.current_series, fn {ref, {pid, {left, right}}} ->
-      # TODO: Punish the unfinished combatants somehow
       Logger.error(fn ->
-        "Terminating battle, combatants: {#{left.name}, #{right.name}}"
+        "Terminating battle as a draw, combatants: {#{left.name}, #{right.name}}"
       end)
+
+      :ok = Gladiators.register_battle_result({left.id, right.id}, :draw)
 
       Process.demonitor(ref)
       BattleSupervisor.terminate_battle_server(pid)

@@ -8,20 +8,22 @@ defmodule PixelSmash.Battles.Battle do
     Log
   }
 
+  @type id :: String.t()
+
   defsum do
     defdata Scheduled do
-      id :: String.t()
+      id :: Battle.id()
       fighters :: {Fighter.t(), Fighter.t()} \\ nil
     end
 
     defdata InProgress do
-      id :: String.t()
+      id :: Battle.id()
       fighters :: {Fighter.t(), Fighter.t()} \\ nil
       log :: Log.t()
     end
 
     defdata Finished do
-      id :: String.t()
+      id :: Battle.id()
       winner :: Fighter.t()
       loser :: Fighter.t()
       log :: Log.t()
