@@ -5,6 +5,7 @@ defmodule PixelSmashWeb.SpriteComponent do
     ~L"""
     <svg
       style="min-width: 64px; min-height: 64px;"
+      class="border-solid border-2 border-black"
       viewBox="1 1 <%= @sprite.x %> <%= @sprite.y %>"
       xmlns="http://www.w3.org/2000/svg"
       shape-rendering="crispEdges">
