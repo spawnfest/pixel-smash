@@ -14,7 +14,7 @@ defmodule PixelSmash.Wallets.Vault do
       ...> [%Wallet{id: "+0", user_id: "user_0"}, %Wallet{id: _, user_id: "user_1"}] = Vault.list_wallets(pid)
       iex>
       ...> %Wallet{user_id: "user_1", deposit: deposit} = Vault.get_wallet_by_user(pid, "user_1")
-      ...> true = Decimal.eq?("250.0", deposit)
+      ...> true = Decimal.eq?("1000.0", deposit)
       iex>
       ...> %Wallet{deposit: deposit} = Vault.get_wallet(pid, "+0")
       ...> true = Decimal.eq?(100, deposit)

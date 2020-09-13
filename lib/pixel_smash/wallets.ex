@@ -6,16 +6,16 @@ defmodule PixelSmash.Wallets do
 
       iex> alias PixelSmash.{Wallets, Wallets.Wallet}
       iex>
-      ...> ^wallet_id = Wallets.get_wallet_id("user_0")
-      ...> 300.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
+      ...> wallet_id = Wallets.get_wallet_id("user_0")
+      ...> 1000.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
-      ...> {:error, :not_enough_balance} = Wallets.take_stake(wallet_id, "500")
+      ...> {:error, :not_enough_balance} = Wallets.take_stake(wallet_id, "1100")
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, "299.9")
-      ...> 0.1 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
+      ...> 700.1 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
       iex>
       ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.fund(wallet_id, "399.9")
-      ...> 400.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
+      ...> 1100.0 = wallet_id |> Wallets.get_balance() |> Decimal.to_float()
   """
 
   alias PixelSmash.Wallets.{
