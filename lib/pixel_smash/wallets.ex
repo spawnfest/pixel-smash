@@ -6,18 +6,18 @@ defmodule PixelSmash.Wallets do
 
       iex> alias PixelSmash.{Wallets, Wallets.Wallet}
       iex>
-      ...> %Wallet{user_id: "user_0", deposit: deposit, id: wallet_id} = Wallets.open_wallet("user_0", 300)
+      ...> %Wallet{user_id: "user_0", deposit: deposit, id: wallet_id} = Wallets.open_wallet("user_0", "300")
       ...> true = Decimal.eq?(300, deposit)
       iex>
       ...> ^wallet_id = Wallets.get_wallet_id("user_0")
       ...> 300.0 = Wallets.get_ballance(wallet_id)
       iex>
-      ...> {:error, :not_enough_ballance} = Wallets.take_stake(wallet_id, 500)
+      ...> {:error, :not_enough_ballance} = Wallets.take_stake(wallet_id, "500")
       iex>
-      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, 300)
-      ...> 0.0 = Wallets.get_ballance(wallet_id)
+      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.take_stake(wallet_id, "299.9")
+      ...> 0.1 = Wallets.get_ballance(wallet_id)
       iex>
-      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.deposit(wallet_id, 400)
+      ...> {:ok, %Wallet{id: ^wallet_id}} = Wallets.fund(wallet_id, "399.9")
       ...> 400.0 = Wallets.get_ballance(wallet_id)
       iex>
       ...> %Wallet{id: wallet_id} = Wallets.open_wallet("user_0", 300)
@@ -74,7 +74,7 @@ defmodule PixelSmash.Wallets do
     end)
   end
 
-  def deposit(wallet_id, amount) do
+  def fund(wallet_id, amount) do
     Vault.update_wallet(wallet_id, fn %Wallet{deposit: deposit} = wallet ->
       %{wallet | deposit: Decimal.add(deposit, amount)}
     end)
