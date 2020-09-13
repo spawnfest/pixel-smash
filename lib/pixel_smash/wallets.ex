@@ -67,6 +67,7 @@ defmodule PixelSmash.Wallets do
   def take_stake(wallet_id, amount) do
     Vault.update_wallet(wallet_id, fn %Wallet{deposit: deposit} = wallet ->
       updated_deposit = Decimal.sub(deposit, amount)
+
       if Decimal.lt?(updated_deposit, 0) do
         {:error, :not_enough_ballance}
       else

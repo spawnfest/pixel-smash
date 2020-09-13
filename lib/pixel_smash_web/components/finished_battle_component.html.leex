@@ -5,28 +5,7 @@
     </span>
   </div>
   <div class="flex flex-col items-start px-4 py-6 space-y-4">
-    <div class="flex items-start items-center space-x-4">
-      <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @winner.sprite %>
-      <div>
-        <h2 class="text-lg font-semibold text-gray-100 -mt-1">
-          <%= @winner.name %>
-        </h2>
-        <small class="block text-sm text-gray-500">
-          Winner
-        </small>
-      </div>
-    </div>
-
-    <div class="flex items-start items-center space-x-4">
-      <%= live_component @socket, PixelSmashWeb.SpriteComponent, sprite: @loser.sprite %>
-      <div>
-        <h2 class="text-lg font-semibold text-gray-100 -mt-1">
-          <%= @loser.name %>
-        </h2>
-        <small class="block text-sm text-gray-500">
-          Loser
-        </small>
-      </div>
-    </div>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @winner, text: "Winner" %>
+    <%= live_component @socket, PixelSmashWeb.GladiatorComponent, gladiator: @loser, text: "Loser" %>
   </div>
 </div>

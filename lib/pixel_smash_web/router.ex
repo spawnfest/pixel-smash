@@ -21,6 +21,7 @@ defmodule PixelSmashWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/gladiator_modal", PageLive, :gladiator_modal
   end
 
   # Other scopes may use custom stacks.

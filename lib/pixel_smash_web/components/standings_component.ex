@@ -29,9 +29,4 @@ defmodule PixelSmashWeb.StandingsComponent do
       </table>
     """
   end
-
-  @impl true
-  def mount(socket) do
-    {:ok, socket}
-  end
 end

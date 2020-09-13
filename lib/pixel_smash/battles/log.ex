@@ -13,9 +13,11 @@ defmodule PixelSmash.Battles.Log do
   end
 
   def append(%Battles.Log{} = log, action) do
-    %Battles.Log{log
-    | actions: log.actions ++ [action],
-      narrations: log.narrations ++ [narrate_action(action)]}
+    %Battles.Log{
+      log
+      | actions: log.actions ++ [action],
+        narrations: log.narrations ++ [narrate_action(action)]
+    }
   end
 
   defp narrate_action(%Battles.Action.Attack{} = action) do
@@ -28,23 +30,23 @@ defmodule PixelSmash.Battles.Log do
 
   defp attack_narration(1, action) do
     [
-    action.fighter.name,
-    " leaps into action and hits ",
-    action.target.name,
-    " for ",
-    Integer.to_string(action.damage),
-    " damage!"
+      action.fighter.name,
+      " leaps into action and hits ",
+      action.target.name,
+      " for ",
+      Integer.to_string(action.damage),
+      " damage!"
     ]
   end
 
   defp attack_narration(2, action) do
     [
-    action.fighter.name,
-    " attacks and does ",
-    Integer.to_string(action.damage),
-    " damage to ",
-    action.target.name,
-    "."
+      action.fighter.name,
+      " attacks and does ",
+      Integer.to_string(action.damage),
+      " damage to ",
+      action.target.name,
+      "."
     ]
   end
 
@@ -81,7 +83,7 @@ defmodule PixelSmash.Battles.Log do
       Integer.to_string(action.damage),
       " damage to ",
       action.target.name,
-      ".",
+      "."
     ]
   end
 

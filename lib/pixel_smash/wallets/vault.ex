@@ -96,7 +96,7 @@ defmodule PixelSmash.Wallets.Vault do
     wallet =
       vault
       |> Map.values()
-      |> Enum.find(& &1.user_id == id)
+      |> Enum.find(&(&1.user_id == id))
 
     {:reply, wallet, vault}
   end

@@ -30,14 +30,22 @@ config :phoenix, :json_library, Jason
 config :pixel_smash, :repo, PixelSmash.MemoryRepo
 
 config :money,
-  default_currency: :USD,           # this allows you to do Money.new(100)
-  separator: ".",                   # change the default thousands separator for Money.to_string
-  delimiter: ",",                   # change the default decimal delimeter for Money.to_string
-  symbol: true,                     # don’t display the currency symbol in Money.to_string
-  symbol_on_right: false,           # position the symbol
-  symbol_space: false,              # add a space between symbol and number
-  fractional_unit: true,            # display units after the delimeter
-  strip_insignificant_zeros: true   # don’t display the insignificant zeros or the delimeter
+  # this allows you to do Money.new(100)
+  default_currency: :USD,
+  # change the default thousands separator for Money.to_string
+  separator: ".",
+  # change the default decimal delimeter for Money.to_string
+  delimiter: ",",
+  # don’t display the currency symbol in Money.to_string
+  symbol: true,
+  # position the symbol
+  symbol_on_right: false,
+  # add a space between symbol and number
+  symbol_space: false,
+  # display units after the delimeter
+  fractional_unit: true,
+  # don’t display the insignificant zeros or the delimeter
+  strip_insignificant_zeros: true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
