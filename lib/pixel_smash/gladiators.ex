@@ -42,7 +42,11 @@ defmodule PixelSmash.Gladiators do
     PixelSmash.Gladiators.Gladiator.generate()
   end
 
-  def to_sprite(gladiator) do
-    PixelSmash.Sprites.Spritifier.to_sprite(gladiator)
+  def equip(%Gladiator{} = gladiator, %PixelSmash.Items.Item{} = item, slot) do
+    sprite = PixelSmash.Sprites.equip(gladiator, item)
+
+    gladiator
+    |> Map.put(:sprite, sprite)
+    |> Map.put(slot, item)
   end
 end

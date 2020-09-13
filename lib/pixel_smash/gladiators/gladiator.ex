@@ -21,6 +21,8 @@ defmodule PixelSmash.Gladiators.Gladiator do
     magic :: non_neg_integer()
     secret :: non_neg_integer()
     spells :: [String.t()]
+    slot1 :: map()
+    slot2 :: map()
   end
 
   def generate() do
